@@ -1,38 +1,60 @@
-.App {
-  text-align: center;
+.bg-blue {
+  background-color: #90b0f1;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/*Navigation Bar*/
+ul.navigation
+{
+    /*sticky*/
+    position: sticky;
+    top:0;
+    background-color: darkcyan;
+    list-style-type: none;
+    padding: 0%;
+    overflow: hidden;
+    border: solid white 1px;
+    z-index: 11;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+ul.navigation li
+{ 
+    text-align: center;
+    position: relative;
+    padding: 0px;
+    margin: 0px;
+    width: 120px;
+    height: 100%;
+    display: block;
+    color: white;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+li.left{
+  float: left;
+  color: black;
 }
 
-.App-link {
-  color: #61dafb;
+li.right{
+  float: right;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+ul.navigation li a, ul.navigation li a:link,ul.navigation li a:hover,ul.navigation li a:active
+{
+    color:white;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    padding: 5px 0px;
+    margin: 0px;
+    
+}
+
+ul.navigation li a:hover, a:active
+{ 
+    background-color: rgb(89, 116, 189);
+}
+
+li.currentPage
+{
+    background-color: rgb(2, 95, 95)
 }
