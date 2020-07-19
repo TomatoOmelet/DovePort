@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
+@RequestMapping(value = "/api")
 public class UserController {
     
     @Autowired
