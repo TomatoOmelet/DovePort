@@ -13,25 +13,14 @@ import org.springframework.security.core.userdetails.User.UserBuilder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        UserBuilder users = User.withDefaultPasswordEncoder();
-        auth.inMemoryAuthentication()
-            .withUser(users.username("user").password("user").roles("EMPLOYEE"))
-            .withUser(users.username("user2").password("user2").roles("EMPLOYEE"));
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
-        .antMatchers(
-          HttpMethod.GET,
-          "/index*", "/static/**", "/*.js", "/*.json", "/*.ico")
-          .permitAll()
-        .anyRequest().authenticated()
-        .and()
-        .formLogin().loginPage("/index.html")
-        .loginProcessingUrl("/perform_login")
-        .defaultSuccessUrl("/index.html")
-        .failureUrl("/index.html");
+        http
+        .csrf().disable()   
+        .authorizeRequests()
+        .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+            //.formLogin().and()
+            .httpBasic();
     }
 }
