@@ -40,7 +40,7 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }catch(DuplicateKeyException e){
             MessageBean ob = new MessageBean("username already in use");
-            return new ResponseEntity<>(ob, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(ob, HttpStatus.NOT_ACCEPTABLE);
         }catch(Exception e)
         {
             MessageBean ob = new MessageBean(e.getMessage());
