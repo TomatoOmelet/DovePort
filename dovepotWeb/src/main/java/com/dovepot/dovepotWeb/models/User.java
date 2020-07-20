@@ -1,30 +1,36 @@
 package com.dovepot.dovepotWeb.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
 public class User {
     @Id
-    String id;
+    Long id;
+
+    @Indexed(unique=true)
+    String username;
+
     String name;
-    String phone;
-    String email;
+    String password;
+
+
 
     public User() {
     }
 
-    public User(String name, String phone, String email) {
+    public User(String name, String password, String username) {
         this.name = name;
-        this.phone = phone;
-        this.email = email;
+        this.password = password;
+        this.username = username;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -36,19 +42,19 @@ public class User {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getUsername() {
+        return username;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPassword() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

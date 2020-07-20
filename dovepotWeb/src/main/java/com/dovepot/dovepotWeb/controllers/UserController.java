@@ -40,10 +40,10 @@ public class UserController {
         User c = optuser.get();
         if(user.getName() != null)
             c.setName(user.getName());
-        if(user.getPhone() != null)
-            c.setPhone(user.getPhone());
-        if(user.getEmail() != null)
-            c.setEmail(user.getEmail());
+        if(user.getPassword() != null)
+            c.setPassword(user.getPassword());
+        if(user.getUsername() != null)
+            c.setUsername(user.getUsername());
         userRepository.save(c);
         return c;
     }
