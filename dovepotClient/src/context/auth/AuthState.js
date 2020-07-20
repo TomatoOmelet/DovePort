@@ -54,7 +54,8 @@ const AuthState = (props)=>{
         //};
 
         try {
-            const res = await axios.post(`${serverAddress}/api/auth`, {formData});
+            const param = {"username":formData.username, "password" : formData.password}
+            const res = await axios.post(`${serverAddress}/authenticate`, param);
             dispatch({type:LOGIN_SUCCESS, payload:res.data})
             loadUser();
         } catch (error) {
