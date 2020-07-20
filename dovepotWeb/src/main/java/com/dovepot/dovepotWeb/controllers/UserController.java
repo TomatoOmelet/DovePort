@@ -1,8 +1,16 @@
 package com.dovepot.dovepotWeb.controllers;
 
+import com.dovepot.dovepotWeb.models.MessageBean;
 import com.dovepot.dovepotWeb.models.User;
 import com.dovepot.dovepotWeb.repositories.UserRepository;
+import com.mongodb.MongoWriteException;
+
+import org.apache.catalina.connector.Response;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,10 +32,21 @@ public class UserController {
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/users")
-    public User SaveUser(@RequestBody User user) {
-        userRepository.save(user);
-
-        return user;
+    public ResponseEntity<?> SaveUser(@RequestBody User user) {
+        //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        //user.setPassword(encoder.encode(user.getPassword()));
+        try{
+            userRepository.save(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }catch(DuplicateKeyException e){
+            MessageBean ob = new MessageBean("username already in use");
+            return new ResponseEntity<>(ob, HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch(Exception e)
+        {
+            MessageBean ob = new MessageBean(e.getMessage());
+            return new ResponseEntity<>(ob, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/users/{id}")

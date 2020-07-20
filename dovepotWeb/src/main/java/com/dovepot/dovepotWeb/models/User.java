@@ -7,13 +7,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 public class User {
     @Id
-    String id;
+    private String id;
 
     @Indexed(unique=true)
-    String username;
+    private String username;
 
-    String name;
-    String password;
+    private String name;
+    private String password;
 
 
 
@@ -51,7 +51,7 @@ public class User {
     }
 
     public String getPassword() {
-        return username;
+        return password;
     }
 
     public void setPassword(String password) {

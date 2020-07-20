@@ -1,10 +1,10 @@
 package com.dovepot.dovepotWeb.models;
 
-public class AuthenticationBean {
+public class MessageBean {
 
     private String message;
     //constructors, getters
-    public AuthenticationBean(String s)
+    public MessageBean(String s)
     {
         message = s;
     }
@@ -19,6 +19,6 @@ public class AuthenticationBean {
 
     @Override
     public String toString() {
-        return String.format("HelloWorldBean [message=%s]", message);
+        return String.format(message);
     }
 }
