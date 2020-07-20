@@ -1,43 +1,24 @@
-import React, {useState} from 'react'
-import axios from "axios"
+import React, {useState, useContext} from 'react'
+import AuthContext from "../../context/auth/authContext"
 
 const Login = () => {
-    const[state, setState] = useState({email: '',
-                                       password: '',
-                                       hasLoginFailed: false,
-                                       showSuccessMessage: false});
-
+    const[user, setUser] = useState({username: '',
+                                       password: ''});
+    const authContext = useContext(AuthContext);
+    const {login} = authContext;
+    
     const onChange = (e) => {
-        setState(
+        setUser(
             {
-                ...state,
+                ...user,
                 [e.target.name]: e.target.value
             }
         )
     }
-    //Login
-    const login = async (formData) => {
-        const config = {
-            headers:{"ContentType":"application/json"}
-        };
-
-        // try {
-        //     const res = await axios.post("/perform_login", formData, config);
-        // } catch (error) {
-        //     console.error(error.message)
-        // }
-        if(state.email==='user' && state.password==='user'){
-            //AuthenticationService.registerSuccessfulLogin(state.email, state.password)
-            setState({...state, showSuccessMessage:true, hasLoginFailed:false})
-        }
-        else {
-             setState({...state, showSuccessMessage:false, hasLoginFailed:true})
-        }
-    }
 
     const onSubmit = (e)=>{
         e.preventDefault();
-        login(state);
+        login(user);
     }
 
     return (
@@ -46,8 +27,8 @@ const Login = () => {
             
             <form>
                 <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input type="email" className="form-control" name="email" onChange={onChange} required></input>
+                    <label htmlFor="username">UserName:</label>
+                    <input type="username" className="form-control" name="username" onChange={onChange} required></input>
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password:</label>

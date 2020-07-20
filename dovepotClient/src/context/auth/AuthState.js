@@ -4,6 +4,7 @@ import AuthContext from "./authContext";
 import AuthReducer from "./authReducer";
 import setAuthToken from "../../utils/setAuthToken";
 import {REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_ERRORS} from "../types";
+import {serverAddress} from "../properties"
 
 const AuthState = (props)=>{
     const initialState = {
@@ -48,12 +49,12 @@ const AuthState = (props)=>{
 
     //Login
     const login = async (formData) => {
-        const config = {
-            headers:{"ContentType":"application/json"}
-        };
+        //const config = {
+        //    headers:{"ContentType":"application/json"}
+        //};
 
         try {
-            const res = await axios.post("/api/auth", formData, config);
+            const res = await axios.post(`${serverAddress}/api/auth`, {formData});
             dispatch({type:LOGIN_SUCCESS, payload:res.data})
             loadUser();
         } catch (error) {

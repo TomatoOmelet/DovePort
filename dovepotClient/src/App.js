@@ -6,8 +6,12 @@ import Home from './components/pages/Home';
 import Login from "./components/pages/Login"
 import Register from "./components/pages/Register"
 
+import AuthState from "./context/auth/AuthState"
+
+
 function App() {
   return (
+    <AuthState>
     <BrowserRouter>
       <NavBar/>
       <div className="container">
@@ -20,6 +24,7 @@ function App() {
         </Switch>
       </div>
     </BrowserRouter>
+    </AuthState>
   );
 }
 
