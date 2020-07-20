@@ -40,9 +40,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         logger.debug("Authentication Request For '{}'", request.getRequestURL());
-
         final String requestTokenHeader = request.getHeader(this.tokenHeader);
-
         String username = null;
         String jwtToken = null;
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
@@ -59,6 +57,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         logger.debug("JWT_TOKEN_USERNAME_VALUE '{}'", username);
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.jwtInMemoryUserDetailsService.loadUserByUsername(username);

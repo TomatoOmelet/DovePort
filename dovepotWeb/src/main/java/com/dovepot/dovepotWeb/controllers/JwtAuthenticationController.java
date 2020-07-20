@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import com.dovepot.dovepotWeb.models.JwtRequest;
 import com.dovepot.dovepotWeb.models.JwtResponse;
 import com.dovepot.dovepotWeb.secruity.AuthenticationException;
-import com.dovepot.dovepotWeb.secruity.JwtUserDetails;
 import com.dovepot.dovepotWeb.utils.JwtTokenUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +56,6 @@ public class JwtAuthenticationController {
   public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
     String authToken = request.getHeader(tokenHeader);
     final String token = authToken.substring(7);
-    String username = jwtTokenUtil.getUsernameFromToken(token);
-    JwtUserDetails user = (JwtUserDetails) jwtInMemoryUserDetailsService.loadUserByUsername(username);
 
     if (jwtTokenUtil.canTokenBeRefreshed(token)) {
       String refreshedToken = jwtTokenUtil.refreshToken(token);
@@ -76,7 +73,7 @@ public class JwtAuthenticationController {
   private void authenticate(String username, String password) {
     Objects.requireNonNull(username);
     Objects.requireNonNull(password);
-
+    
     try {
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     } catch (DisabledException e) {

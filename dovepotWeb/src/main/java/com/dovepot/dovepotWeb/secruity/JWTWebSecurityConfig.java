@@ -1,6 +1,8 @@
 package com.dovepot.dovepotWeb.secruity;
 
 
+import com.dovepot.dovepotWeb.service.JwtInMemoryUserDetailsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +30,7 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtUnAuthenticationEntryPoint jwtUnAuthorizedResponseAuthenticationEntryPoint;
 
     @Autowired
-    private UserDetailsService jwtInMemoryUserDetailsService;
+    private JwtInMemoryUserDetailsService jwtInMemoryUserDetailsService;
 
     @Autowired
     private JwtRequestFilter jwtAuthenticationTokenFilter;
@@ -38,8 +40,7 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(jwtInMemoryUserDetailsService)
+        auth.userDetailsService(jwtInMemoryUserDetailsService)
             .passwordEncoder(passwordEncoderBean());
     }
 
@@ -84,8 +85,8 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .ignoring()
             .antMatchers(
-                HttpMethod.GET,
-                "/" //Other Stuff You want to Ignore
+                HttpMethod.POST,
+                "/api/users" //Other Stuff You want to Ignore
             );
     }
 }

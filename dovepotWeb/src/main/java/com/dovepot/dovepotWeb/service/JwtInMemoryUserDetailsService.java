@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,12 +25,13 @@ public class JwtInMemoryUserDetailsService implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
     User user = userRepository.findByUsername(username);
-    System.out.println("user found:" + user);
     if (user == null) {
       throw new UsernameNotFoundException(String.format("USER_NOT_FOUND '%s'.", username));
     }
 
-    return new JwtUserDetails(user.getId(), user.getUsername(), user.getPassword(), "user");
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    String password = encoder.encode(user.getPassword());
+    return new JwtUserDetails(user.getId(), user.getUsername(), password, "user");
   }
 
 }

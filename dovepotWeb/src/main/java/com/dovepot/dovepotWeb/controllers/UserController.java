@@ -3,6 +3,7 @@ package com.dovepot.dovepotWeb.controllers;
 import com.dovepot.dovepotWeb.models.User;
 import com.dovepot.dovepotWeb.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
