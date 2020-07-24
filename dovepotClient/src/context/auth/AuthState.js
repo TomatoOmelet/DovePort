@@ -10,7 +10,7 @@ import {serverAddress} from "../properties"
 const AuthState = (props)=>{
 
     const alertContext = useContext(AlertContext);
-    const {setAlert} = alertContext;
+    const {setAlert, clearAlert} = alertContext;
 
     const initialState = {
         token: localStorage.getItem("token"),
@@ -47,6 +47,7 @@ const AuthState = (props)=>{
             //loadUser();
         } catch (error) {
             console.error(error.message)
+            clearAlert();
             setAlert(error.response.data)
             dispatch({type:REGISTER_FAIL})
         }
@@ -71,6 +72,7 @@ const AuthState = (props)=>{
             {
                 alert = error.response.data
             }
+            clearAlert();
             setAlert(alert);
             dispatch({type:LOGIN_FAIL})
         }
