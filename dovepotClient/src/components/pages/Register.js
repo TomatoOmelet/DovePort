@@ -1,11 +1,13 @@
 import React, {useState, useContext, useEffect} from 'react'
 import AuthContext from "../../context/auth/authContext"
-
+import AlertContext from "../../context/alert/alertContext"
 
 const Register = (props) => {
     const[user, setUser] = useState({username: '', display_name:'', password: '', password2: ''});
     const authContext = useContext(AuthContext);
+    const alertContext = useContext(AlertContext);
     const {register, isAuthenticated} = authContext;
+    const {setAlert} = alertContext;
 
     useEffect(()=>{
         if(isAuthenticated){
@@ -19,7 +21,7 @@ const Register = (props) => {
         {
             register({"username":user.username, "name":user.display_name, "password":user.password});
         }else{
-            console.error("passwords does not match");
+            setAlert("passwords does not match");
         }
         
     }
@@ -40,7 +42,7 @@ const Register = (props) => {
             <form onSubmit={onSubmit}>
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
-                    <input type="text" className="form-control" name="username" onChange={onChange} required minLength="6" maxLength="12"></input>
+                    <input type="text" className="form-control" name="username" onChange={onChange} required minLength="4" maxLength="12"></input>
                 </div>
                 <div className="form-group">
                     <label htmlFor="display_name">Display Name</label>

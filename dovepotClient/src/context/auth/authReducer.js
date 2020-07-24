@@ -28,13 +28,7 @@ export default (state, action)=>{
                 token:null,
                 isAuthenticated: false,
                 loading: false,
-                username: null,
-                error: action.payload
-            }
-        case CLEAR_ERRORS:
-            return{
-                ...state,
-                error:null
+                username: null
             }
         default:
             return state

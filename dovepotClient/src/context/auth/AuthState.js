@@ -1,18 +1,22 @@
-import React, {useReducer} from "react";
+import React, {useReducer, useContext} from "react";
 import axios from "axios" ;
 import AuthContext from "./authContext";
 import AuthReducer from "./authReducer";
 import setAuthToken from "../../utils/setAuthToken";
-import {REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_ERRORS} from "../types";
+import AlertContext from "../alert/alertContext"
+import {REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT} from "../types";
 import {serverAddress} from "../properties"
 
 const AuthState = (props)=>{
+
+    const alertContext = useContext(AlertContext);
+    const {setAlert} = alertContext;
+
     const initialState = {
         token: localStorage.getItem("token"),
         isAuthenticated: null,
         loading: true,
-        username: null,
-        error: null
+        username: null
     }
 
     const [state, dispatch] = useReducer(AuthReducer, initialState);
@@ -43,7 +47,8 @@ const AuthState = (props)=>{
             //loadUser();
         } catch (error) {
             console.error(error.message)
-            dispatch({type:REGISTER_FAIL, payload:error.response.data.msg})
+            setAlert(error.message)
+            dispatch({type:REGISTER_FAIL})
         }
     }
 
@@ -65,7 +70,8 @@ const AuthState = (props)=>{
             {
                 alert = error.response.data.errors[0].msg
             }
-            dispatch({type:LOGIN_FAIL, payload:alert})
+            setAlert(alert);
+            dispatch({type:LOGIN_FAIL})
         }
     }
 
@@ -74,22 +80,15 @@ const AuthState = (props)=>{
         dispatch({type:LOGOUT})
     }
 
-    //Clear Errors
-    const clearErrors = ()=>{
-        dispatch({type:CLEAR_ERRORS})
-    }
-
     return(
         <AuthContext.Provider value = {{
           token: state.token,
           isAuthenticated: state.isAuthenticated,
           loading: state.loading,
           user: state.user,
-          error: state.error,
           register,
           login,
-          logout,
-          clearErrors
+          logout
         }}>
             {props.children}
         </AuthContext.Provider>

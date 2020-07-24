@@ -5,8 +5,8 @@
 /*Navigation Bar*/
 ul.navigation
 {
-    /*sticky*/
-    position: sticky;
+    /*sticky
+    position: sticky;*/
     top:0;
     background-color: darkcyan;
     list-style-type: none;
