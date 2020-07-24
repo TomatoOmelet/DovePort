@@ -65,7 +65,7 @@ const AuthState = (props)=>{
             //loadUser();
         } catch (error) {
             console.error(error.message)
-            let alert = error.response.data.msg
+            let alert = error.message
             if(error.response.data.errors && error.response.data.errors.length > 0)
             {
                 alert = error.response.data.errors[0].msg
