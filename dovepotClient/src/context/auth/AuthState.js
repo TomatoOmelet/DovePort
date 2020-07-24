@@ -11,7 +11,7 @@ const AuthState = (props)=>{
         token: localStorage.getItem("token"),
         isAuthenticated: null,
         loading: true,
-        user: null,
+        username: null,
         error: null
     }
 
@@ -22,13 +22,13 @@ const AuthState = (props)=>{
         if(localStorage.token){
             setAuthToken(localStorage.token);
         }
-        // try {
-        //     const res = await axios.get("/api/auth");
-        //     dispatch({type:USER_LOADED, payload:res.data})
-        // } catch (error) {
-        //     console.error(error.message)
-        //     dispatch({type:AUTH_ERROR})
-        // }
+        try {
+            const res = await axios.get("/api/auth");
+            dispatch({type:USER_LOADED, payload:res.data})
+        } catch (error) {
+            console.error(error.message)
+            dispatch({type:AUTH_ERROR})
+        }
     }
 
     //Reguster User
@@ -40,7 +40,7 @@ const AuthState = (props)=>{
         try {
             const res = await axios.post(`${serverAddress}/api/users`, formData, config);
             dispatch({type:REGISTER_SUCCESS, payload:res.data})  
-            loadUser();
+            //loadUser();
         } catch (error) {
             console.error(error.message)
             dispatch({type:REGISTER_FAIL, payload:error.response.data.msg})
@@ -57,7 +57,7 @@ const AuthState = (props)=>{
             const param = {"username":formData.username, "password" : formData.password}
             const res = await axios.post(`${serverAddress}/authenticate`, param, config);
             dispatch({type:LOGIN_SUCCESS, payload:res.data})
-            loadUser();
+            //loadUser();
         } catch (error) {
             console.error(error.message)
             let alert = error.response.data.msg
