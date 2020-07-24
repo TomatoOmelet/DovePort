@@ -41,12 +41,12 @@ public class UserController {
             userRepository.save(user);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }catch(DuplicateKeyException e){
-            MessageBean ob = new MessageBean("username already in use");
-            return new ResponseEntity<>(ob, HttpStatus.NOT_ACCEPTABLE);
+            //MessageBean ob = new MessageBean("username already in use");
+            return new ResponseEntity<>("username already in use", HttpStatus.NOT_ACCEPTABLE);
         }catch(Exception e)
         {
-            MessageBean ob = new MessageBean(e.getMessage());
-            return new ResponseEntity<>(ob, HttpStatus.INTERNAL_SERVER_ERROR);
+            //MessageBean ob = new MessageBean(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         
     }

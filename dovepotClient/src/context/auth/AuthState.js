@@ -47,7 +47,7 @@ const AuthState = (props)=>{
             //loadUser();
         } catch (error) {
             console.error(error.message)
-            setAlert(error.message)
+            setAlert(error.response.data)
             dispatch({type:REGISTER_FAIL})
         }
     }
@@ -55,7 +55,8 @@ const AuthState = (props)=>{
     //Login
     const login = async (formData) => {
         const config = {
-           headers:{"ContentType":"application/json"}
+           headers:{"ContentType":"application/json",
+                    "Accept":"*/*"}
         };
 
         try {
@@ -66,9 +67,9 @@ const AuthState = (props)=>{
         } catch (error) {
             console.error(error.message)
             let alert = error.message
-            if(error.response.data.errors && error.response.data.errors.length > 0)
+            if(error.response.data)
             {
-                alert = error.response.data.errors[0].msg
+                alert = error.response.data
             }
             setAlert(alert);
             dispatch({type:LOGIN_FAIL})
