@@ -9,6 +9,7 @@ import Register from "./components/pages/Register"
 
 import AuthState from "./context/auth/AuthState"
 import AlertState from "./context/alert/AlertState"
+import PrivateRoute from './components/routing/PrivateRoute';
 
 
 function App() {
@@ -21,10 +22,10 @@ function App() {
       <div className="container">
         <Alert/>
         <Switch>
-          <Route exact path = {process.env.PUBLIC_URL + "/"} component={Home}/>
+          <PrivateRoute exact path = {process.env.PUBLIC_URL + "/"} component={Home}/>
           <Route exact path = {process.env.PUBLIC_URL + "/login"} component={Login}/>
           <Route exact path = {process.env.PUBLIC_URL + "/register"} component={Register}/>
-          <Route component={Home}/>
+          <PrivateRoute component={Home}/>
         </Switch>
       </div>
     </BrowserRouter>
