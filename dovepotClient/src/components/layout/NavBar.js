@@ -6,10 +6,14 @@ import AuthContext from '../../context/auth/authContext'
 
 const Navbar = () => {
     const authContext = useContext(AuthContext);
-    const {loadUser} = authContext;
+    const {loadUser, username, token} = authContext;
 
     useEffect(() => {
-        loadUser();
+        if(!username || !token)
+        {
+            loadUser();
+        }
+        
     }, [])
 
     function useForceUpdate(){

@@ -28,7 +28,6 @@ const AuthState = (props)=>{
         }
         try {
             const res = await axios.get(`${serverAddress}/api/auth`);
-            console.log(res.data);
             dispatch({type:USER_LOADED, payload:res.data})
         } catch (error) {
             console.error(error.message)
