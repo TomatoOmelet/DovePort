@@ -73,6 +73,8 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .cacheControl(); //disable caching
     }
 
+    
+
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
         webSecurity

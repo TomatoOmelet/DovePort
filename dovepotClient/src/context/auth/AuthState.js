@@ -27,7 +27,8 @@ const AuthState = (props)=>{
             setAuthToken(localStorage.token);
         }
         try {
-            const res = await axios.get("/api/auth");
+            const res = await axios.get(`${serverAddress}/api/auth`);
+            console.log(res.data);
             dispatch({type:USER_LOADED, payload:res.data})
         } catch (error) {
             console.error(error.message)
@@ -44,7 +45,7 @@ const AuthState = (props)=>{
         try {
             const res = await axios.post(`${serverAddress}/api/users`, formData, config);
             dispatch({type:REGISTER_SUCCESS, payload:res.data})  
-            //loadUser();
+            loadUser();
         } catch (error) {
             console.error(error.message)
             clearAlert();
@@ -64,7 +65,7 @@ const AuthState = (props)=>{
             const param = {"username":formData.username, "password" : formData.password}
             const res = await axios.post(`${serverAddress}/authenticate`, param, config);
             dispatch({type:LOGIN_SUCCESS, payload:res.data})
-            //loadUser();
+            loadUser();
         } catch (error) {
             console.error(error.message)
             let alert = error.message
@@ -91,7 +92,8 @@ const AuthState = (props)=>{
           user: state.user,
           register,
           login,
-          logout
+          logout,
+          loadUser
         }}>
             {props.children}
         </AuthContext.Provider>

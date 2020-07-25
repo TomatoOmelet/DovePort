@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins={ "http://localhost:3000", "http://localhost:4200" })
+@CrossOrigin(origins={ "${databaseAddress}", "${clientAddress}" })
 public class JwtAuthenticationController {
 
   @Value("${jwt.http.request.header}")
@@ -60,6 +60,18 @@ public class JwtAuthenticationController {
     if (jwtTokenUtil.canTokenBeRefreshed(token)) {
       String refreshedToken = jwtTokenUtil.refreshToken(token);
       return ResponseEntity.ok(new JwtResponse(refreshedToken));
+    } else {
+      return ResponseEntity.badRequest().body(null);
+    }
+  }
+
+  @RequestMapping(value = "${jwt.access.token.uri}", method = RequestMethod.GET)
+  public ResponseEntity<?> accessToken(HttpServletRequest request) {
+    String authToken = request.getHeader(tokenHeader);
+    final String token = authToken.substring(7);
+
+    if (jwtTokenUtil.canTokenBeRefreshed(token)) {
+      return ResponseEntity.ok(new JwtResponse(token));
     } else {
       return ResponseEntity.badRequest().body(null);
     }

@@ -1,8 +1,17 @@
-import React, {useState} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import {NavLink} from "react-router-dom"
 import {navbarStrings} from "../../resource/text/UItext"
+import AuthContext from '../../context/auth/authContext'
+
 
 const Navbar = () => {
+    const authContext = useContext(AuthContext);
+    const {loadUser} = authContext;
+
+    useEffect(() => {
+        loadUser();
+    }, [])
+
     function useForceUpdate(){
         const [index, setIndex] = useState(1); // integer state
         return () => setIndex(index===1?2:1); // update the state to force render
