@@ -10,6 +10,7 @@ import Register from "./components/pages/Register"
 import AuthState from "./context/auth/AuthState"
 import AlertState from "./context/alert/AlertState"
 import PrivateRoute from './components/routing/PrivateRoute';
+import Search from './components/pages/Search/Search';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <PrivateRoute exact path = {process.env.PUBLIC_URL + "/"} component={Home}/>
           <Route exact path = {process.env.PUBLIC_URL + "/login"} component={Login}/>
           <Route exact path = {process.env.PUBLIC_URL + "/register"} component={Register}/>
+          <PrivateRoute exact path = {process.env.PUBLIC_URL + "/search"} component={Search}/>
           <PrivateRoute component={Home}/>
         </Switch>
       </div>
