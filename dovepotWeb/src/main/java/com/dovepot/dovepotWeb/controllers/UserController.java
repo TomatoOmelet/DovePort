@@ -9,6 +9,7 @@ import org.apache.catalina.connector.Response;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,9 +29,10 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping(method=RequestMethod.GET, value="/users")
-    public Iterable<User> GetUsers() {
-        return userRepository.findAll();
+    @RequestMapping(method=RequestMethod.GET, value="/users/search")
+    public Iterable<User> GetUsers(@Param("keyword") String keyword) {
+        System.out.println(keyword);
+        return userRepository.getByUsernameRegexQuery("^" + keyword);
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/users")

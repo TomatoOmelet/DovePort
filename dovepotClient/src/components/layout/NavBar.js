@@ -26,11 +26,14 @@ const Navbar = () => {
     return (
         <ul className="navigation">
             <div className="container">
-            <li className={`right ${window.location.pathname=== process.env.PUBLIC_URL + "/"?"currentPage":undefined}`}>
+            <li className={`left ${window.location.pathname=== process.env.PUBLIC_URL + "/"?"currentPage":undefined}`}>
                 <NavLink to = {process.env.PUBLIC_URL + "/"} onClick={forceUpdate}>{navbarStrings.explore}</NavLink>
             </li>
-            <li className={`right ${window.location.pathname=== process.env.PUBLIC_URL + "/About"?"currentPage":undefined}`}>
-                <NavLink to = {process.env.PUBLIC_URL + "/About"} onClick={forceUpdate}>{navbarStrings.profile}</NavLink>
+            <li className={`left ${window.location.pathname=== process.env.PUBLIC_URL + "/search"?"currentPage":undefined}`}>
+                <NavLink to = {process.env.PUBLIC_URL + "/search"} onClick={forceUpdate}>{navbarStrings.explore}</NavLink>
+            </li>
+            <li className={`right ${window.location.pathname=== process.env.PUBLIC_URL + "/profile"?"currentPage":undefined}`}>
+                <NavLink to = {process.env.PUBLIC_URL + "/profile"} onClick={forceUpdate}>{navbarStrings.profile}</NavLink>
             </li>
             </div>
         </ul>
