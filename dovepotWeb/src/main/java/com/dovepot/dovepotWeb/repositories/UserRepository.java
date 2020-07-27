@@ -13,6 +13,6 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     User findByUsername(String username);
 
-    @Query("{username : {$regex : ?0}}")
-    List<User> getByUsernameRegexQuery(String keyword);
+    @Query("{$or:[{username : {$regex : ?0}}, {name : {$regex : ?0}}]}")
+    List<User> findUsernameOrNameRegexQuery(String keyword);
 }

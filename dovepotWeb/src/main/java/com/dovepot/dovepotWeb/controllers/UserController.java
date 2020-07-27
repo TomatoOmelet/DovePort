@@ -36,7 +36,7 @@ public class UserController {
     @RequestMapping(method=RequestMethod.GET, value="/users/search")
     public Iterable<UserInfo> GetUsers(@Param("keyword") String keyword) {
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
-        List<User> users = userRepository.getByUsernameRegexQuery("^" + keyword);
+        List<User> users = userRepository.findUsernameOrNameRegexQuery("^" + keyword);
         for (User user : users) {
             userInfos.add(new UserInfo(user.getId(), user.getName(), user.getUsername()));
         }
