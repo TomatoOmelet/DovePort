@@ -1,7 +1,13 @@
 package com.dovepot.dovepotWeb.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dovepot.dovepotWeb.repositories.UserRepository;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
@@ -9,12 +15,17 @@ public class User {
     @Id
     private String id;
 
-    @Indexed(unique=true)
+    @Indexed(unique = true)
     private String username;
 
     private String name;
     private String password;
 
+    @DBRef
+    private List<User> followers = new ArrayList<User>();
+    
+    @DBRef
+    private List<User> followings = new ArrayList<User>();
 
 
     public User() {
@@ -56,5 +67,45 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<User> getFollowers()
+    {
+        return followers;
+    }
+
+    public void addFollower(User user)
+    {
+        followers.add(user);
+    }
+
+    public boolean removeFollower(User user)
+    {
+        if(followers.contains(user)){
+            followers.remove(user);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public List<User> getFollowings()
+    {
+        return followings;
+    }
+
+    public void addFollowing(User user)
+    {
+        followings.add(user);
+    }
+
+    public boolean removeFollowing(User user)
+    {
+        if(followings.contains(user)){
+            followings.remove(user);
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.dovepot.dovepotWeb.models.MessageBean;
 import com.dovepot.dovepotWeb.models.User;
 import com.dovepot.dovepotWeb.models.UserInfo;
 import com.dovepot.dovepotWeb.repositories.UserRepository;
+import com.dovepot.dovepotWeb.utils.JwtTokenUtil;
 import com.mongodb.MongoWriteException;
 
 import org.apache.catalina.connector.Response;
@@ -17,9 +18,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,15 +32,17 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/users")
 @CrossOrigin(origins={ "${databaseAddress}", "${clientAddress}" })
 public class UserController {
     
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    JwtTokenUtil jwtUtil;
 
-    @RequestMapping(method=RequestMethod.GET, value="/users/search")
-    public Iterable<UserInfo> GetUsers(@Param("keyword") String keyword) {
+    @RequestMapping(method=RequestMethod.GET, value="/search")
+    public Iterable<UserInfo> SearchUsers(@Param("keyword") String keyword) {
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
         Pageable page = PageRequest.of(0, 20);
         Page<User> users = userRepository.findUsernameOrNameRegexQuery("^" + keyword, page);
@@ -47,7 +52,7 @@ public class UserController {
         return userInfos;
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/users")
+    @RequestMapping(method=RequestMethod.POST, value="")
     public ResponseEntity<?> SaveUser(@RequestBody User user) {
         //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         //user.setPassword(encoder.encode(user.getPassword()));
@@ -61,16 +66,15 @@ public class UserController {
         {
             //MessageBean ob = new MessageBean(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        
+        } 
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/users/{id}")
+    @RequestMapping(method=RequestMethod.GET, value="/{id}")
     public Optional<User> GetUser(@PathVariable String id) {
         return userRepository.findById(id);
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/users/{id}")
+    @RequestMapping(method=RequestMethod.PUT, value="/{id}")
     public User UpdateUser(@PathVariable String id, @RequestBody User user) {
         Optional<User> optuser = userRepository.findById(id);
         User c = optuser.get();
@@ -84,12 +88,38 @@ public class UserController {
         return c;
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/users/{id}")
+    @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
     public String DeleteUser(@PathVariable String id) {
         Optional<User> optuser = userRepository.findById(id);
         User user = optuser.get();
         userRepository.delete(user);
 
         return "";
+    }
+
+    @RequestMapping(method=RequestMethod.POST, value="/follow/{id}")
+    @Transactional
+    public ResponseEntity<?> FollowUser(@PathVariable String id, @RequestHeader("${jwt.http.request.header}") String token) { 
+        try{
+            Optional<User> userToFollowOP = userRepository.findById(id);
+            User userToFollow = userToFollowOP.get();
+            token = token.substring(7);
+            String username = jwtUtil.getUsernameFromToken(token);
+            User userFollower = userRepository.findByUsername(username);
+            if(userFollower.getId() == userToFollow.getId())
+            {
+                return new ResponseEntity<>("You cannot follow yourself", HttpStatus.BAD_REQUEST);
+            }
+            userFollower.addFollowing(userToFollow);
+            userToFollow.addFollower(userFollower);
+            userRepository.save(userToFollow);
+            userRepository.save(userFollower);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
+            //MessageBean ob = new MessageBean(e.getMessage());
+            return new ResponseEntity<>("An unknown error occurs, please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
+        } 
     }
 }
