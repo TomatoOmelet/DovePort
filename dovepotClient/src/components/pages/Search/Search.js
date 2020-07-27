@@ -28,10 +28,10 @@ const Search = () => {
             };
 
             const res = await axios.get(`${serverAddress}/api/users/search?keyword=${keyword}`, config);
-            console.log(res);
+            setUsers(res.data.length > 0?res.data:null);
         } catch (error) {
             console.log(error.message);
-            setAlert(error.response.data);
+            setAlert(error.message);
         }
     }
 
@@ -46,8 +46,9 @@ const Search = () => {
             </form>
             {/*display users*/}
             {users&&users.map((user, index) => {
-                return <UserSearchResult key={index}/>
+                return <UserSearchResult key={index} user={user}/>
             })}
+            {users===null&&<p>No Results Found.</p>}
         </div>
     )
 }
