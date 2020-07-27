@@ -2,6 +2,7 @@ package com.dovepot.dovepotWeb.controllers;
 
 import com.dovepot.dovepotWeb.models.MessageBean;
 import com.dovepot.dovepotWeb.models.User;
+import com.dovepot.dovepotWeb.models.UserInfo;
 import com.dovepot.dovepotWeb.repositories.UserRepository;
 import com.mongodb.MongoWriteException;
 
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,9 +34,14 @@ public class UserController {
     UserRepository userRepository;
 
     @RequestMapping(method=RequestMethod.GET, value="/users/search")
-    public Iterable<User> GetUsers(@Param("keyword") String keyword) {
+    public Iterable<UserInfo> GetUsers(@Param("keyword") String keyword) {
         //System.out.println(keyword);
-        return userRepository.getByUsernameRegexQuery("^" + keyword);
+        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        List<User> users = userRepository.getByUsernameRegexQuery("^" + keyword);
+        for (User user : users) {
+            userInfos.add(new UserInfo(user.getId(), user.getName(), user.getUsername()));
+        }
+        return userInfos;
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/users")
