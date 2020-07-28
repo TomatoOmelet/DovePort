@@ -10,3 +10,13 @@ export let navbarStrings = new LocalizedStrings({
 
     }
 });
+
+export let searchPageStrings = new LocalizedStrings({
+    English:{
+        follow:"Follow",
+        following: "Following"
+    },
+    Chinese: {
+
+    }
+});

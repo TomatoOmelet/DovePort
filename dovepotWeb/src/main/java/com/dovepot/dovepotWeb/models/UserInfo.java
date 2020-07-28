@@ -20,7 +20,7 @@ public class UserInfo{
         this.username = user.getUsername();
         this.followers = user.getFollowers();
         this.followings = user.getFollowings();
-        System.out.println(followings);
+        //System.out.println(followings);
     }
 
     public Set<String> getFollowers()
@@ -28,7 +28,7 @@ public class UserInfo{
         return this.followers;
     }
 
-    public Set<String> getFollings()
+    public Set<String> getFollowings()
     {
         return this.followings;
     }
