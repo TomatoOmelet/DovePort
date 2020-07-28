@@ -22,7 +22,7 @@ const UserState = (props)=>{
     //follow User
     const followUser = async (id)=>{
         try {
-            await axios.pos(`${serverAddress}/api/users/follow/${id}`);
+            await axios.post(`${serverAddress}/api/users/follow/${id}`);
             loadUser();
         } catch (error) {
             console.error(error.message)
