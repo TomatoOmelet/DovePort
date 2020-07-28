@@ -22,12 +22,15 @@ const UserSearchResult = (props) => {
         }
     }
 
+    const buttonValue = alreadyFollowed?searchPageStrings.following:searchPageStrings.follow;
+
     return (
         <div className="card">
             <div className="card-body">
                 <p><strong style={{fontSize:"25px"}}>{name}</strong>@{username}</p>
-                <input type="submit" value={alreadyFollowed?searchPageStrings.following:searchPageStrings.follow} 
-                onClick={followButton} className={`btn ${alreadyFollowed?"btn-info":"btn-primary"}`}/>
+                {id!==authContext.user.id&&
+                <input type="submit" value={buttonValue} 
+                onClick={followButton} className={`btn ${alreadyFollowed?"btn-info":"btn-primary"}`}/>}
             </div>
         </div>
     )

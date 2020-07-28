@@ -26,6 +26,12 @@ const UserState = (props)=>{
             loadUser();
         } catch (error) {
             console.error(error.message)
+            if(error.response && error.response.data)
+            {
+                setAlert(error.response.data);
+            }else{
+                setAlert("An unknown error occurs");
+            }
         }
     }
 
@@ -36,6 +42,12 @@ const UserState = (props)=>{
             loadUser();
         } catch (error) {
             console.error(error.message)
+            if(error.response && error.response.data)
+            {
+                setAlert(error.response.data);
+            }else{
+                setAlert("An unknown error occurs");
+            }
         }
     }
 

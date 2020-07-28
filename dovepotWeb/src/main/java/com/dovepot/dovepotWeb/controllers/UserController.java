@@ -106,7 +106,7 @@ public class UserController {
             token = token.substring(7);
             String username = jwtUtil.getUsernameFromToken(token);
             User userFollower = userRepository.findByUsername(username);
-            if(userFollower.getId() == userToFollow.getId())
+            if(userFollower.getId().equals(userToFollow.getId()))
             {
                 return new ResponseEntity<>("You cannot follow yourself", HttpStatus.BAD_REQUEST);
             }
@@ -132,7 +132,7 @@ public class UserController {
             token = token.substring(7);
             String username = jwtUtil.getUsernameFromToken(token);
             User userFollower = userRepository.findByUsername(username);
-            if(userFollower.getId() == userToUnfollow.getId())
+            if(userFollower.getId().equals(userToUnfollow.getId()))
             {
                 return new ResponseEntity<>("You cannot unfollow yourself", HttpStatus.BAD_REQUEST);
             }
