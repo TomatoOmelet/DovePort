@@ -1,6 +1,8 @@
 package com.dovepot.dovepotWeb.models;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserInfo{
     public String id;
@@ -9,9 +11,26 @@ public class UserInfo{
 
     public String name;
 
-    public UserInfo(String id, String name, String username) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
+    private Set<String> followers;
+    private Set<String> followings;
+
+    public UserInfo(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.username = user.getUsername();
+        this.followers = user.getFollowers();
+        this.followings = user.getFollowings();
+        System.out.println(followings);
     }
+
+    public Set<String> getFollowers()
+    {
+        return this.followers;
+    }
+
+    public Set<String> getFollings()
+    {
+        return this.followings;
+    }
+
 }

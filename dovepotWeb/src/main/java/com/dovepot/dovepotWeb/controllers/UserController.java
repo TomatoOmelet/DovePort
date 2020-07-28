@@ -47,7 +47,7 @@ public class UserController {
         Pageable page = PageRequest.of(0, 20);
         Page<User> users = userRepository.findUsernameOrNameRegexQuery("^" + keyword, page);
         for (User user : users) {
-            userInfos.add(new UserInfo(user.getId(), user.getName(), user.getUsername()));
+            userInfos.add(new UserInfo(user));
         }
         return userInfos;
     }

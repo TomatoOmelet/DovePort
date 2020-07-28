@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.dovepot.dovepotWeb.models.JwtRequest;
 import com.dovepot.dovepotWeb.models.JwtResponse;
+import com.dovepot.dovepotWeb.models.UserInfo;
+import com.dovepot.dovepotWeb.repositories.UserRepository;
 import com.dovepot.dovepotWeb.secruity.AuthenticationException;
 import com.dovepot.dovepotWeb.utils.JwtTokenUtil;
 
@@ -42,6 +44,9 @@ public class JwtAuthenticationController {
   @Autowired
   private UserDetailsService jwtInMemoryUserDetailsService;
 
+  @Autowired
+  private UserRepository UserRepository;
+
   @RequestMapping(value = "${jwt.get.token.uri}", method = RequestMethod.POST)
   public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
       throws AuthenticationException {
@@ -49,7 +54,9 @@ public class JwtAuthenticationController {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        UserInfo user = new UserInfo(UserRepository.findByUsername(username));
+        return ResponseEntity.ok(new JwtResponse(token, user));
   }
 
   @RequestMapping(value = "${jwt.refresh.token.uri}", method = RequestMethod.GET)
@@ -59,7 +66,9 @@ public class JwtAuthenticationController {
 
     if (jwtTokenUtil.canTokenBeRefreshed(token)) {
       String refreshedToken = jwtTokenUtil.refreshToken(token);
-      return ResponseEntity.ok(new JwtResponse(refreshedToken));
+      String username = jwtTokenUtil.getUsernameFromToken(refreshedToken);
+      UserInfo user = new UserInfo(UserRepository.findByUsername(username));
+      return ResponseEntity.ok(new JwtResponse(refreshedToken, user));
     } else {
       return ResponseEntity.badRequest().body(null);
     }
@@ -70,8 +79,10 @@ public class JwtAuthenticationController {
     String authToken = request.getHeader(tokenHeader);
     final String token = authToken.substring(7);
 
-    if (jwtTokenUtil.canTokenBeRefreshed(token)) {
-      return ResponseEntity.ok(new JwtResponse(token));
+    if (jwtTokenUtil.isTokenValid(token)) {
+      String username = jwtTokenUtil.getUsernameFromToken(token);
+      UserInfo user = new UserInfo(UserRepository.findByUsername(username));
+      return ResponseEntity.ok(new JwtResponse(token, user));
     } else {
       return ResponseEntity.badRequest().body(null);
     }
