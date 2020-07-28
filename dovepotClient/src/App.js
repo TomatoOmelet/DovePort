@@ -8,6 +8,7 @@ import Login from "./components/pages/Login"
 import Register from "./components/pages/Register"
 
 import AuthState from "./context/auth/AuthState"
+import UserState from "./context/user/UserState"
 import AlertState from "./context/alert/AlertState"
 import PrivateRoute from './components/routing/PrivateRoute';
 import Search from './components/pages/Search/Search';
@@ -17,6 +18,7 @@ function App() {
   return (
     <AlertState>
     <AuthState>
+    <UserState>
     <BrowserRouter>
       <NavBar/>
       
@@ -31,6 +33,7 @@ function App() {
         </Switch>
       </div>
     </BrowserRouter>
+    </UserState>
     </AuthState>
     </AlertState>
   );
