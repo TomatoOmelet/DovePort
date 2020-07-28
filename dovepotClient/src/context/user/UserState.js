@@ -29,9 +29,20 @@ const UserState = (props)=>{
         }
     }
 
+    //follow User
+    const unfollowUser = async (id)=>{
+        try {
+            await axios.post(`${serverAddress}/api/users/unfollow/${id}`);
+            loadUser();
+        } catch (error) {
+            console.error(error.message)
+        }
+    }
+
     return(
         <UserContext.Provider value = {{
-            followUser
+            followUser,
+            unfollowUser
         }}>
             {props.children}
         </UserContext.Provider>

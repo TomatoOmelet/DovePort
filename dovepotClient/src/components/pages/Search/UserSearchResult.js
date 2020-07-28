@@ -11,12 +11,12 @@ const UserSearchResult = (props) => {
     const alreadyFollowed = authContext.user.followings.includes(id);
 
     const userContext = useContext(UserContext)
-    const {followUser} = userContext;
+    const {followUser, unfollowUser} = userContext;
 
     const followButton = ()=>{
         if(alreadyFollowed)
         {
-
+            unfollowUser(id);
         }else{
             followUser(id);
         }

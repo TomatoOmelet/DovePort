@@ -122,4 +122,30 @@ public class UserController {
             return new ResponseEntity<>("An unknown error occurs, please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         } 
     }
+
+    @RequestMapping(method=RequestMethod.POST, value="/unfollow/{id}")
+    @Transactional
+    public ResponseEntity<?> UnfollowUser(@PathVariable String id, @RequestHeader("${jwt.http.request.header}") String token) { 
+        try{
+            Optional<User> userToUnfollowOP = userRepository.findById(id);
+            User userToUnfollow = userToUnfollowOP.get();
+            token = token.substring(7);
+            String username = jwtUtil.getUsernameFromToken(token);
+            User userFollower = userRepository.findByUsername(username);
+            if(userFollower.getId() == userToUnfollow.getId())
+            {
+                return new ResponseEntity<>("You cannot unfollow yourself", HttpStatus.BAD_REQUEST);
+            }
+            userFollower.removeFollowing(userToUnfollow.getId());
+            userToUnfollow.removeFollower(userFollower.getId());
+            userRepository.save(userToUnfollow);
+            userRepository.save(userFollower);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(Exception e)
+        {
+            System.out.println("Error: " + e.getMessage());
+            //MessageBean ob = new MessageBean(e.getMessage());
+            return new ResponseEntity<>("An unknown error occurs, please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
+        } 
+    }
 }
