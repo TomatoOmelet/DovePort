@@ -110,8 +110,8 @@ public class UserController {
             {
                 return new ResponseEntity<>("You cannot follow yourself", HttpStatus.BAD_REQUEST);
             }
-            userFollower.addFollowing(userToFollow);
-            userToFollow.addFollower(userFollower);
+            userFollower.addFollowing(userToFollow.getId());
+            userToFollow.addFollower(userFollower.getId());
             userRepository.save(userToFollow);
             userRepository.save(userFollower);
             return new ResponseEntity<>(HttpStatus.OK);

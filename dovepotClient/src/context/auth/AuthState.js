@@ -68,7 +68,7 @@ const AuthState = (props)=>{
         } catch (error) {
             console.error(error.message)
             let alert = error.message
-            if(error.response.data)
+            if(error.response && error.response.data)
             {
                 alert = error.response.data
             }

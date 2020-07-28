@@ -1,13 +1,14 @@
 package com.dovepot.dovepotWeb.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.dovepot.dovepotWeb.repositories.UserRepository;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
@@ -17,15 +18,12 @@ public class User {
 
     @Indexed(unique = true)
     private String username;
-
     private String name;
     private String password;
 
-    @DBRef
-    private List<User> followers = new ArrayList<User>();
-    
-    @DBRef
-    private List<User> followings = new ArrayList<User>();
+    private Set<String> followers = new HashSet<String>();
+
+    private Set<String> followings = new HashSet<String>();
 
 
     public User() {
@@ -69,17 +67,17 @@ public class User {
         this.password = password;
     }
 
-    public List<User> getFollowers()
+    public Set<String> getFollowers()
     {
         return followers;
     }
 
-    public void addFollower(User user)
+    public void addFollower(String user)
     {
         followers.add(user);
     }
 
-    public boolean removeFollower(User user)
+    public boolean removeFollower(String user)
     {
         if(followers.contains(user)){
             followers.remove(user);
@@ -89,17 +87,17 @@ public class User {
         }
     }
 
-    public List<User> getFollowings()
+    public Set<String> getFollowings()
     {
         return followings;
     }
 
-    public void addFollowing(User user)
+    public void addFollowing(String user)
     {
         followings.add(user);
     }
 
-    public boolean removeFollowing(User user)
+    public boolean removeFollowing(String user)
     {
         if(followings.contains(user)){
             followings.remove(user);
