@@ -12,7 +12,7 @@ import UserState from "./context/user/UserState"
 import AlertState from "./context/alert/AlertState"
 import PrivateRoute from './components/routing/PrivateRoute';
 import Search from './components/pages/Search/Search';
-import Profile from './components/pages/Profile';
+import Profile from './components/pages/Profile/Profile';
 
 
 function App() {

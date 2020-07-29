@@ -6,10 +6,10 @@ import AuthContext from '../../context/auth/authContext'
 
 const Navbar = () => {
     const authContext = useContext(AuthContext);
-    const {loadUser, user, token} = authContext;
+    const {loadUser, user, token, isAuthenticated} = authContext;
 
     useEffect(() => {
-        if(!user || !token)
+        if(!isAuthenticated)
         {
             loadUser();
         }
@@ -32,9 +32,10 @@ const Navbar = () => {
             <li className={`left ${window.location.pathname=== process.env.PUBLIC_URL + "/search"?"currentPage":undefined}`}>
                 <NavLink to = {process.env.PUBLIC_URL + "/search"} onClick={forceUpdate}>{navbarStrings.search}</NavLink>
             </li>
+            {user&&user.username&&
             <li className={`right ${window.location.pathname=== process.env.PUBLIC_URL + "/profile"?"currentPage":undefined}`}>
-                <NavLink to = {process.env.PUBLIC_URL + "/profile"} onClick={forceUpdate}>{user&&user.username}</NavLink>
-            </li>
+                <NavLink to = {process.env.PUBLIC_URL + "/profile"} onClick={forceUpdate}>{user.username}</NavLink>
+            </li>}
             </div>
         </ul>
 
