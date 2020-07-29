@@ -59,14 +59,28 @@ public class UserController {
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
         page -= 1;
         page = page>0?page:0;
-        token = token.substring(7);
-        String username = jwtUtil.getUsernameFromToken(token);
-        User user = userRepository.findByUsername(username);
+        User user = getUserFromToken(token);
         String[] followers = user.getFollowers().toArray(new String[0]);
         int init = page * entries_each_page;
         for (int x = init; x < followers.length; x++) {
             User follow = userRepository.findById(followers[x]).get();
             userInfos.add(new UserInfo(follow));
+        }
+        return userInfos;
+    }
+
+    @RequestMapping(method=RequestMethod.GET, value="/followings")
+    public Iterable<UserInfo> getFollowings(@Param("entries_each_page") Integer entries_each_page, @Param("page") Integer page
+                                        , @RequestHeader("${jwt.http.request.header}") String token) {
+        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        page -= 1;
+        page = page>0?page:0;
+        User user = getUserFromToken(token);
+        String[] followings = user.getFollowings().toArray(new String[0]);
+        int init = page * entries_each_page;
+        for (int x = init; x < followings.length; x++) {
+            User following = userRepository.findById(followings[x]).get();
+            userInfos.add(new UserInfo(following));
         }
         return userInfos;
     }
@@ -122,9 +136,7 @@ public class UserController {
         try{
             Optional<User> userToFollowOP = userRepository.findById(id);
             User userToFollow = userToFollowOP.get();
-            token = token.substring(7);
-            String username = jwtUtil.getUsernameFromToken(token);
-            User userFollower = userRepository.findByUsername(username);
+            User userFollower = getUserFromToken(token);
             if(userFollower.getId().equals(userToFollow.getId()))
             {
                 return new ResponseEntity<>("You cannot follow yourself", HttpStatus.BAD_REQUEST);
@@ -148,9 +160,7 @@ public class UserController {
         try{
             Optional<User> userToUnfollowOP = userRepository.findById(id);
             User userToUnfollow = userToUnfollowOP.get();
-            token = token.substring(7);
-            String username = jwtUtil.getUsernameFromToken(token);
-            User userFollower = userRepository.findByUsername(username);
+            User userFollower = getUserFromToken(token);
             if(userFollower.getId().equals(userToUnfollow.getId()))
             {
                 return new ResponseEntity<>("You cannot unfollow yourself", HttpStatus.BAD_REQUEST);
@@ -166,5 +176,13 @@ public class UserController {
             //MessageBean ob = new MessageBean(e.getMessage());
             return new ResponseEntity<>("An unknown error occurs, please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         } 
+    }
+
+    private User getUserFromToken(String token)
+    {
+        token = token.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+        User user = userRepository.findByUsername(username);
+        return user;
     }
 }
