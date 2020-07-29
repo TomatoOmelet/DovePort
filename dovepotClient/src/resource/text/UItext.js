@@ -27,7 +27,9 @@ export let profilePageStrings = new LocalizedStrings({
     English:{
         followers:"Followers",
         followings: "Followings",
-        logOut: "Log Out"
+        logOut: "Log Out",
+        emptyFollowers:"You do not have followers, yet.",
+        emptyFollowings:"You have not followed anyone."
     },
     Chinese: {
 

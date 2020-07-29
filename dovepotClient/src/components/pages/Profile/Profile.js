@@ -15,7 +15,6 @@ const Profile = () => {
         try{
             const followers = await getFollowers(user.id);
             setState({mode:"followers", info:followers});
-            console.log(followers)
         }catch(e){
             console.error(e.message)
         }
@@ -26,7 +25,6 @@ const Profile = () => {
         try{
             const followings = await getFollowings(user.id);
             setState({mode:"followings", info:followings});
-            console.log(followings)
         }catch(e){
             console.error(e.message)
     }
@@ -47,9 +45,9 @@ const Profile = () => {
                     <button type="submit" className="btn btn-danger" onClick={logout}>{profilePageStrings.logOut}</button>
                 </div>
 
-                <div className="row">
-                {state.mode==="followers"&&<UserList/>}
-                {state.mode==="followings"&&<UserList/>}
+                <div className="col">
+                {state.mode==="followers"&&<UserList users = {state.info} emptyMessage={profilePageStrings.emptyFollowers}/>}
+                {state.mode==="followings"&&<UserList users = {state.info} emptyMessage={profilePageStrings.emptyFollowings}/>}
                 </div>
             </div>
         )
