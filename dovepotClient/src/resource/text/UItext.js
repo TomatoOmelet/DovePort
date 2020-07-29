@@ -14,7 +14,20 @@ export let navbarStrings = new LocalizedStrings({
 export let searchPageStrings = new LocalizedStrings({
     English:{
         follow:"Follow",
-        following: "Following"
+        following: "Following",
+        search:"Search",
+        noResultFound:"No Results Found."
+    },
+    Chinese: {
+
+    }
+});
+
+export let profilePageStrings = new LocalizedStrings({
+    English:{
+        followers:"Followers",
+        followings: "Followings",
+        logOut: "Log Out"
     },
     Chinese: {
 

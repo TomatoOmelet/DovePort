@@ -1,8 +1,9 @@
 import React, {useState, useContext} from 'react'
 import axios from "axios" ;
-import UserSearchResult from './UserSearchResult'
+import UserSearchResult from './UserInfo'
 import AlertContect from "../../../context/alert/alertContext"
 import {serverAddress} from "../../../context/properties"
+import {searchPageStrings} from "../../../resource/text/UItext"
 
 
 const Search = () => {
@@ -42,13 +43,13 @@ const Search = () => {
                 <div className="form-group">
                     <input type="text" className="form-control" placeholder="Username to Search" onChange={onChange} required></input>
                 </div>
-                <input type="submit" value="Search" className="btn btn-primary"/>
+                <input type="submit" value={searchPageStrings.search} className="btn btn-primary"/>
             </form>
             {/*display users*/}
             {users&&users.map((user, index) => {
                 return <UserSearchResult key={index} user={user}/>
             })}
-            {users===null&&<p>No Results Found.</p>}
+            {users===null&&<p>{searchPageStrings.noResultFound}</p>}
         </div>
     )
 }

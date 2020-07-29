@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/users")
@@ -48,6 +49,24 @@ public class UserController {
         Page<User> users = userRepository.findUsernameOrNameRegexQuery("^" + keyword, page);
         for (User user : users) {
             userInfos.add(new UserInfo(user));
+        }
+        return userInfos;
+    }
+
+    @RequestMapping(method=RequestMethod.GET, value="/followers")
+    public Iterable<UserInfo> getFollowers(@Param("entries_each_page") Integer entries_each_page, @Param("page") Integer page
+                                        , @RequestHeader("${jwt.http.request.header}") String token) {
+        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        page -= 1;
+        page = page>0?page:0;
+        token = token.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+        User user = userRepository.findByUsername(username);
+        String[] followers = user.getFollowers().toArray(new String[0]);
+        int init = page * entries_each_page;
+        for (int x = init; x < followers.length; x++) {
+            User follow = userRepository.findById(followers[x]).get();
+            userInfos.add(new UserInfo(follow));
         }
         return userInfos;
     }
