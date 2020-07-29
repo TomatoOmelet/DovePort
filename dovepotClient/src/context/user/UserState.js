@@ -9,7 +9,7 @@ import UserContext from "./userContext"
 const UserState = (props)=>{
 
     const alertContext = useContext(AlertContext);
-    const {setAlert, clearAlert} = alertContext;
+    const {setAlert, setAlertWithError} = alertContext;
     const authContext = useContext(AuthContext);
     const {loadUser} = authContext;
 
@@ -26,12 +26,7 @@ const UserState = (props)=>{
             loadUser();
         } catch (error) {
             console.error(error.message)
-            if(error.response && error.response.data)
-            {
-                setAlert(error.response.data);
-            }else{
-                setAlert("An unknown error occurs");
-            }
+            setAlertWithError(error);
         }
     }
 
@@ -42,19 +37,36 @@ const UserState = (props)=>{
             loadUser();
         } catch (error) {
             console.error(error.message)
-            if(error.response && error.response.data)
-            {
-                setAlert(error.response.data);
-            }else{
-                setAlert("An unknown error occurs");
-            }
+            setAlertWithError(error);
+        }
+    }
+
+    const getFollowers = async(id, page = 1, entries_each_page = 10) =>{
+        try {
+            const res = await axios.get(`${serverAddress}/api/users/followers/${id}?page=${page}&entries_each_page=${entries_each_page}`);
+            return res.data
+        } catch (error) {
+            console.error(error.message)
+            setAlertWithError(error);
+        }
+    }
+
+    const getFollowings = async(id, page = 1, entries_each_page = 10) =>{
+        try {
+            const res = await axios.get(`${serverAddress}/api/users/followings/${id}?page=${page}&entries_each_page=${entries_each_page}`);
+            return res.data
+        } catch (error) {
+            console.error(error.message)
+            setAlertWithError(error);
         }
     }
 
     return(
         <UserContext.Provider value = {{
             followUser,
-            unfollowUser
+            unfollowUser,
+            getFollowers,
+            getFollowings
         }}>
             {props.children}
         </UserContext.Provider>

@@ -53,13 +53,13 @@ public class UserController {
         return userInfos;
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/followers")
+    @RequestMapping(method=RequestMethod.GET, value="/followers/{id}")
     public Iterable<UserInfo> getFollowers(@Param("entries_each_page") Integer entries_each_page, @Param("page") Integer page
-                                        , @RequestHeader("${jwt.http.request.header}") String token) {
+                                        , @RequestHeader("${jwt.http.request.header}") String token, @PathVariable String id) {
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
         page -= 1;
         page = page>0?page:0;
-        User user = getUserFromToken(token);
+        User user = userRepository.findById(id).get();
         String[] followers = user.getFollowers().toArray(new String[0]);
         int init = page * entries_each_page;
         for (int x = init; x < followers.length; x++) {
@@ -69,13 +69,13 @@ public class UserController {
         return userInfos;
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/followings")
+    @RequestMapping(method=RequestMethod.GET, value="/followings/{id}")
     public Iterable<UserInfo> getFollowings(@Param("entries_each_page") Integer entries_each_page, @Param("page") Integer page
-                                        , @RequestHeader("${jwt.http.request.header}") String token) {
+                                        , @RequestHeader("${jwt.http.request.header}") String token, @PathVariable String id) {
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
         page -= 1;
         page = page>0?page:0;
-        User user = getUserFromToken(token);
+        User user = userRepository.findById(id).get();
         String[] followings = user.getFollowings().toArray(new String[0]);
         int init = page * entries_each_page;
         for (int x = init; x < followings.length; x++) {

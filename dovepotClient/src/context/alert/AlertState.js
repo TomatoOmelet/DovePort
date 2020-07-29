@@ -21,11 +21,22 @@ const AlertState = (props)=>{
         dispatch({type:CLEAR_ALERT});
     }
 
+    const setAlertWithError=(error)=>
+    {
+        if(error.response && error.response.data)
+        {
+            setAlert(error.response.data);
+        }else{
+            setAlert("An unknown error occurs");
+        }
+    }
+
     return(
         <AlertContext.Provider value = {{
           alerts:state,
           setAlert,
-          clearAlert
+          clearAlert,
+          setAlertWithError
         }}>
             {props.children}
         </AlertContext.Provider>
