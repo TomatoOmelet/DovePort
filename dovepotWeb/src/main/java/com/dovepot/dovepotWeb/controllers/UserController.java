@@ -136,7 +136,7 @@ public class UserController {
         try{
             Optional<User> userToFollowOP = userRepository.findById(id);
             User userToFollow = userToFollowOP.get();
-            User userFollower = getUserFromToken(token);
+            User userFollower = ControllerUtility.getUserFromToken(jwtUtil, userRepository, token);
             if(userFollower.getId().equals(userToFollow.getId()))
             {
                 return new ResponseEntity<>("You cannot follow yourself", HttpStatus.BAD_REQUEST);
@@ -160,7 +160,7 @@ public class UserController {
         try{
             Optional<User> userToUnfollowOP = userRepository.findById(id);
             User userToUnfollow = userToUnfollowOP.get();
-            User userFollower = getUserFromToken(token);
+            User userFollower = ControllerUtility.getUserFromToken(jwtUtil, userRepository,token);
             if(userFollower.getId().equals(userToUnfollow.getId()))
             {
                 return new ResponseEntity<>("You cannot unfollow yourself", HttpStatus.BAD_REQUEST);
@@ -176,13 +176,5 @@ public class UserController {
             //MessageBean ob = new MessageBean(e.getMessage());
             return new ResponseEntity<>("An unknown error occurs, please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         } 
-    }
-
-    private User getUserFromToken(String token)
-    {
-        token = token.substring(7);
-        String username = jwtUtil.getUsernameFromToken(token);
-        User user = userRepository.findByUsername(username);
-        return user;
     }
 }

@@ -1,5 +1,7 @@
 package com.dovepot.dovepotWeb.models;
 
+import com.mongodb.lang.NonNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -7,10 +9,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Plan {
     @Id
     private String id;
+    @NonNull
     private String ownerID;
+    @NonNull
     private String state;
+    @NonNull
+    private String content;
+    @NonNull
+    private String deadline;
 
-    public Plan(String ownerID, String state) {
+    public Plan(final String ownerID, String content, String deadline,  final String state) {
+        this.content = content;
+        this.deadline = deadline;
         this.ownerID = ownerID;
         this.state = state;
     }
@@ -20,7 +30,7 @@ public class Plan {
         return ownerID;
     }
 
-    public void setOwnerID(String ownerID)
+    public void setOwnerID(final String ownerID)
     {
         this.ownerID = ownerID;
     }
@@ -30,8 +40,26 @@ public class Plan {
         return state;
     }
 
-    public void setState(String state)
+    public void setState(final String state)
     {
         this.state = state;
     }
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(String deadline) {
+		this.deadline = deadline;
+	}
+    
+    
 }
