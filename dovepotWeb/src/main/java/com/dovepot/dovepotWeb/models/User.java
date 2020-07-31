@@ -20,6 +20,7 @@ public class User {
     private String username;
     private String name;
     private String password;
+    private String currentPlanID;
 
     private Set<String> followers = new HashSet<String>();
 
@@ -105,5 +106,15 @@ public class User {
         }else{
             return false;
         }
+    }
+
+    public String getCurrentPlanID()
+    {
+        return currentPlanID;
+    }
+
+    public void setCurrentPlanID(String id)
+    {
+        currentPlanID = id;
     }
 }

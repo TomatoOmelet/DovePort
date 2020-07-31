@@ -3,6 +3,7 @@ import {profilePageStrings} from "../../../resource/text/UItext"
 import AuthContext from '../../../context/auth/authContext'
 import UserContext from '../../../context/user/userContext'
 import { UserList } from './UserList';
+import PlanPage from './PlanPage';
 
 const Profile = () => {
     const authContext = useContext(AuthContext);
@@ -38,11 +39,16 @@ const Profile = () => {
             <div className="row">
                 <div className="col">
                     <h3 style={{display:"inline"}}>{name}</h3><p>@{username}</p>
-                    <button type="submit" className="btn btn-primary" onClick={showFollowings}>{profilePageStrings.followings}:{followings.length}</button>
+                    <button type="submit" className="btn btn-primary" style={{marginRight:"5px"}} 
+                            onClick={showFollowings}>{profilePageStrings.followings}:{followings.length}</button>
+                    
+                    <button type="submit" className="btn btn-primary"  style={{marginInline:"5px"}} 
+                            onClick={showFollowers}>{profilePageStrings.followers}:{followers.length}</button>
+                    
+                    <button type="submit" className="btn btn-danger"  style={{marginInline:"5px"}} 
+                            onClick={logout}>{profilePageStrings.logOut}</button>
                     <br/><br/>
-                    <button type="submit" className="btn btn-primary" onClick={showFollowers}>{profilePageStrings.followers}:{followers.length}</button>
-                    <br/><br/>
-                    <button type="submit" className="btn btn-danger" onClick={logout}>{profilePageStrings.logOut}</button>
+                    <PlanPage/>
                 </div>
 
                 <div className="col">

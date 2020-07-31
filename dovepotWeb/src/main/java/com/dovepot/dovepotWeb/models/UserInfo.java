@@ -13,6 +13,7 @@ public class UserInfo{
 
     private Set<String> followers;
     private Set<String> followings;
+    private String currentPlanID;
 
     public UserInfo(User user) {
         this.id = user.getId();
@@ -20,6 +21,7 @@ public class UserInfo{
         this.username = user.getUsername();
         this.followers = user.getFollowers();
         this.followings = user.getFollowings();
+        this.currentPlanID = user.getCurrentPlanID();
         //System.out.println(followings);
     }
 
@@ -33,4 +35,8 @@ public class UserInfo{
         return this.followings;
     }
 
+    public String getCurrentPlanID()
+    {
+        return this.currentPlanID;
+    }
 }
