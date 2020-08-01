@@ -21,10 +21,10 @@ const PlanPage = () => {
                             <p><i>before</i> {plan.deadline}</p>
                             <br/>
                             <button type="submit" className="btn btn-success"  style={{marginInline:"5px"}} 
-                            onClick={removePlan}>I'm Done</button>
+                            onClick={()=>{removePlan(plan.id)}}>I'm Done</button>
 
                             <button type="submit" className="btn btn-danger"  style={{marginInline:"5px"}} 
-                            onClick={removePlan}>I give up</button>
+                            onClick={()=>{removePlan(plan.id)}}>I give up</button>
                         </div>
                     </div>
                     

@@ -60,7 +60,6 @@ public class PlanController {
     @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
     public String DeletePlan(@PathVariable String id, @RequestHeader("${jwt.http.request.header}") String token) {
         try{
-            System.out.println(token);
             User user = ControllerUtility.getUserFromToken(jwtUtil, userRepository, token);
             Plan plan = planRepository.findById(id).get();
             if(user.getCurrentPlanID().equals(plan.getId()))
