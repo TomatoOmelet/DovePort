@@ -64,6 +64,7 @@ const UserState = (props)=>{
     const removePlan = async(id)=>{
         try {
             await axios.delete(`${serverAddress}/api/plans/${id}`);
+            loadUser();
         } catch (error) {
             console.error(error.message)
             setAlertWithError(error);
