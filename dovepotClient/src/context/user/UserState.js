@@ -71,13 +71,28 @@ const UserState = (props)=>{
         }
     }
 
+    const addPlan = async(planData)=>{
+        try {
+            const config = {
+                headers:{"ContentType":"application/json"}
+            };
+    
+            await axios.post(`${serverAddress}/api/plans`, planData, config);
+            loadUser();
+        } catch (error) {
+            console.error(error.message)
+            setAlertWithError(error);
+        }
+    }
+
     return(
         <UserContext.Provider value = {{
             followUser,
             unfollowUser,
             getFollowers,
             getFollowings,
-            removePlan
+            removePlan,
+            addPlan
         }}>
             {props.children}
         </UserContext.Provider>
