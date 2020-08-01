@@ -6,7 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.dovepot.dovepotWeb.models.JwtRequest;
 import com.dovepot.dovepotWeb.models.JwtResponse;
+import com.dovepot.dovepotWeb.models.Plan;
+import com.dovepot.dovepotWeb.models.User;
 import com.dovepot.dovepotWeb.models.UserInfo;
+import com.dovepot.dovepotWeb.repositories.PlanRepository;
 import com.dovepot.dovepotWeb.repositories.UserRepository;
 import com.dovepot.dovepotWeb.secruity.AuthenticationException;
 import com.dovepot.dovepotWeb.utils.JwtTokenUtil;
@@ -47,6 +50,9 @@ public class JwtAuthenticationController {
   @Autowired
   private UserRepository UserRepository;
 
+  @Autowired
+  private PlanRepository planRepository;
+
   @RequestMapping(value = "${jwt.get.token.uri}", method = RequestMethod.POST)
   public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
       throws AuthenticationException {
@@ -54,9 +60,7 @@ public class JwtAuthenticationController {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        UserInfo user = new UserInfo(UserRepository.findByUsername(username));
-        return ResponseEntity.ok(new JwtResponse(token, user));
+        return ResponseEntity.ok(new JwtResponse(token, tokenToUserInfo(token)));
   }
 
   @RequestMapping(value = "${jwt.refresh.token.uri}", method = RequestMethod.GET)
@@ -66,9 +70,7 @@ public class JwtAuthenticationController {
 
     if (jwtTokenUtil.canTokenBeRefreshed(token)) {
       String refreshedToken = jwtTokenUtil.refreshToken(token);
-      String username = jwtTokenUtil.getUsernameFromToken(refreshedToken);
-      UserInfo user = new UserInfo(UserRepository.findByUsername(username));
-      return ResponseEntity.ok(new JwtResponse(refreshedToken, user));
+      return ResponseEntity.ok(new JwtResponse(refreshedToken, tokenToUserInfo(refreshedToken)));
     } else {
       return ResponseEntity.badRequest().body(null);
     }
@@ -80,9 +82,7 @@ public class JwtAuthenticationController {
     final String token = authToken.substring(7);
 
     if (jwtTokenUtil.isTokenValid(token)) {
-      String username = jwtTokenUtil.getUsernameFromToken(token);
-      UserInfo user = new UserInfo(UserRepository.findByUsername(username));
-      return ResponseEntity.ok(new JwtResponse(token, user));
+      return ResponseEntity.ok(new JwtResponse(token, tokenToUserInfo(token)));
     } else {
       return ResponseEntity.badRequest().body(null);
     }
@@ -104,5 +104,20 @@ public class JwtAuthenticationController {
     } catch (BadCredentialsException e) {
       throw new AuthenticationException("Username or password is incorrect", e);
     }
+  }
+
+  private UserInfo tokenToUserInfo(String token)
+  {
+    String username = jwtTokenUtil.getUsernameFromToken(token);
+    User user = UserRepository.findByUsername(username);
+    UserInfo userInfo;
+    if(user.getCurrentPlanID()!=null)
+    {
+        Plan plan = planRepository.findById(user.getCurrentPlanID()).get();
+        userInfo = new UserInfo(user, plan);
+    }else{
+        userInfo = new UserInfo(user);
+    }
+    return userInfo;
   }
 }

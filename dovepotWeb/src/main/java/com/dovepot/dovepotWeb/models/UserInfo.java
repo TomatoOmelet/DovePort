@@ -27,7 +27,6 @@ public class UserInfo{
         this(user);
         if(plan != null && user.getCurrentPlanID().equals(plan.getId()))
         {
-            System.out.println("Why");
             this.currentPlan = plan;
         }
     }
