@@ -1,6 +1,7 @@
 import React, {useContext, Fragment, useState} from 'react'
 import AuthContext from "../../../context/auth/authContext"
 import UserContext from "../../../context/user/userContext"
+import PlanInfo from '../../Item/PlanInfo';
 
 const PlanPage = () => {
     const [plan, setPlan] = useState({content:"", deadline:""});
@@ -30,19 +31,12 @@ const PlanPage = () => {
             {currentPlan?
                 /*Plan Page*/
                 <Fragment>
-                    <div className="card">
-                        <div className="card-header bg-info">Current Plan</div>
-                        <div className="card-body bg-light">
-                            <p><i>I will</i> {currentPlan.content}</p>
-                            <p><i>before</i> {currentPlan.deadline}</p>
-                            <br/>
-                            <button type="submit" className="btn btn-success"  style={{marginInline:"5px"}} 
-                            onClick={()=>{removePlan(currentPlan.id)}}>I'm Done</button>
+                    <PlanInfo header="Current Plan" username="I" plan={currentPlan}/> 
+                    <button type="submit" className="btn btn-success"  style={{margin:"5px"}} 
+                    onClick={()=>{removePlan(currentPlan.id)}}>I'm Done</button>
 
-                            <button type="submit" className="btn btn-danger"  style={{marginInline:"5px"}} 
-                            onClick={()=>{removePlan(currentPlan.id)}}>I give up</button>
-                        </div>
-                    </div>       
+                    <button type="submit" className="btn btn-danger"  style={{margin:"5px"}} 
+                    onClick={()=>{removePlan(currentPlan.id)}}>I give up</button>   
                 </Fragment>
                 :
                 /*No Plan Page*/
