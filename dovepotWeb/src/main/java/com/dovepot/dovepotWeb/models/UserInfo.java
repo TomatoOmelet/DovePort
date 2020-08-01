@@ -13,7 +13,7 @@ public class UserInfo{
 
     private Set<String> followers;
     private Set<String> followings;
-    private String currentPlanID;
+    private Plan currentPlan;
 
     public UserInfo(User user) {
         this.id = user.getId();
@@ -21,8 +21,14 @@ public class UserInfo{
         this.username = user.getUsername();
         this.followers = user.getFollowers();
         this.followings = user.getFollowings();
-        this.currentPlanID = user.getCurrentPlanID();
-        //System.out.println(followings);
+    }
+
+    public UserInfo(User user, Plan plan) {
+        this(user);
+        if(user.getCurrentPlanID() == plan.getId())
+        {
+            this.currentPlan = plan;
+        }
     }
 
     public Set<String> getFollowers()
@@ -35,8 +41,8 @@ public class UserInfo{
         return this.followings;
     }
 
-    public String getCurrentPlanID()
+    public Plan getCurrentPlan()
     {
-        return this.currentPlanID;
+        return this.currentPlan;
     }
 }

@@ -60,6 +60,14 @@ public class Plan {
 	public void setDeadline(String deadline) {
 		this.deadline = deadline;
 	}
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
     
     
 }
