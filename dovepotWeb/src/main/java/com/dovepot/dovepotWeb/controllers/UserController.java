@@ -51,13 +51,7 @@ public class UserController {
         Pageable page = PageRequest.of(0, 20);
         Page<User> users = userRepository.findUsernameOrNameRegexQuery("^" + keyword, page);
         for (User user : users) {
-            if(user.getCurrentPlanID()!=null)
-            {
-                Plan plan = planRepository.findById(user.getCurrentPlanID()).get();
-                userInfos.add(new UserInfo(user, plan));
-            }else{
-                userInfos.add(new UserInfo(user));
-            }
+            userInfos.add(userToUserInfo(user));
         }
         return userInfos;
     }
@@ -73,13 +67,7 @@ public class UserController {
         int init = page * entries_each_page;
         for (int x = init; x < followers.length; x++) {
             User follow = userRepository.findById(followers[x]).get();
-            if(follow.getCurrentPlanID()!=null)
-            {
-                Plan plan = planRepository.findById(follow.getCurrentPlanID()).get();
-                userInfos.add(new UserInfo(follow, plan));
-            }else{
-                userInfos.add(new UserInfo(follow));
-            }
+            userInfos.add(userToUserInfo(follow));
         }
         return userInfos;
     }
@@ -95,13 +83,7 @@ public class UserController {
         int init = page * entries_each_page;
         for (int x = init; x < followings.length; x++) {
             User following = userRepository.findById(followings[x]).get();
-            if(following.getCurrentPlanID()!=null)
-            {
-                Plan plan = planRepository.findById(following.getCurrentPlanID()).get();
-                userInfos.add(new UserInfo(following, plan));
-            }else{
-                userInfos.add(new UserInfo(following));
-            }
+            userInfos.add(userToUserInfo(following));
         }
         return userInfos;
     }
@@ -197,5 +179,16 @@ public class UserController {
             //MessageBean ob = new MessageBean(e.getMessage());
             return new ResponseEntity<>("An unknown error occurs, please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         } 
+    }
+
+    private UserInfo userToUserInfo(User user)
+    {
+        if(user.getCurrentPlanID()!=null)
+        {
+            Plan plan = planRepository.findById(user.getCurrentPlanID()).get();
+            return new UserInfo(user, plan);
+        }else{
+            return new UserInfo(user);
+        }
     }
 }
