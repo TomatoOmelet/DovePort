@@ -61,12 +61,23 @@ const UserState = (props)=>{
         }
     }
 
+    const removePlan = async(id)=>{
+        try {
+            const res = await axios.delete(`${serverAddress}/api/plans/${id}`);
+            return res.data
+        } catch (error) {
+            console.error(error.message)
+            setAlertWithError(error);
+        }
+    }
+
     return(
         <UserContext.Provider value = {{
             followUser,
             unfollowUser,
             getFollowers,
-            getFollowings
+            getFollowings,
+            removePlan
         }}>
             {props.children}
         </UserContext.Provider>

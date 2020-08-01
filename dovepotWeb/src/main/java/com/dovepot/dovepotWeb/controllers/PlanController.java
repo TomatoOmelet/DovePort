@@ -57,5 +57,26 @@ public class PlanController {
         } 
     }
 
+    @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
+    public String DeletePlan(@PathVariable String id, @RequestHeader("${jwt.http.request.header}") String token) {
+        try{
+            System.out.println(token);
+            User user = ControllerUtility.getUserFromToken(jwtUtil, userRepository, token);
+            Plan plan = planRepository.findById(id).get();
+            if(user.getCurrentPlanID().equals(plan.getId()))
+            {
+                planRepository.delete(plan);
+                user.setCurrentPlanID(null);
+                userRepository.save(user);
+                return "";
+            }else{
+                return "You Are not authorized to delete the plan";
+            }        
+        }catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+            return e.getMessage();
+        }
+    }
 
 }
