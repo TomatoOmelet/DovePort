@@ -25,8 +25,9 @@ public class UserInfo{
 
     public UserInfo(User user, Plan plan) {
         this(user);
-        if(user.getCurrentPlanID() == plan.getId())
+        if(plan != null && user.getCurrentPlanID().equals(plan.getId()))
         {
+            System.out.println("Why");
             this.currentPlan = plan;
         }
     }

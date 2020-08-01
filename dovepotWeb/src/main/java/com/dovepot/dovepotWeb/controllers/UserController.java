@@ -1,8 +1,9 @@
 package com.dovepot.dovepotWeb.controllers;
 
 import com.dovepot.dovepotWeb.models.MessageBean;
-import com.dovepot.dovepotWeb.models.User;
+import com.dovepot.dovepotWeb.models.*;
 import com.dovepot.dovepotWeb.models.UserInfo;
+import com.dovepot.dovepotWeb.repositories.PlanRepository;
 import com.dovepot.dovepotWeb.repositories.UserRepository;
 import com.dovepot.dovepotWeb.utils.JwtTokenUtil;
 import com.mongodb.MongoWriteException;
@@ -40,6 +41,8 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    PlanRepository planRepository;
+    @Autowired
     JwtTokenUtil jwtUtil;
 
     @RequestMapping(method=RequestMethod.GET, value="/search")
@@ -48,7 +51,13 @@ public class UserController {
         Pageable page = PageRequest.of(0, 20);
         Page<User> users = userRepository.findUsernameOrNameRegexQuery("^" + keyword, page);
         for (User user : users) {
-            userInfos.add(new UserInfo(user));
+            if(user.getCurrentPlanID()!=null)
+            {
+                Plan plan = planRepository.findById(user.getCurrentPlanID()).get();
+                userInfos.add(new UserInfo(user, plan));
+            }else{
+                userInfos.add(new UserInfo(user));
+            }
         }
         return userInfos;
     }
@@ -64,7 +73,13 @@ public class UserController {
         int init = page * entries_each_page;
         for (int x = init; x < followers.length; x++) {
             User follow = userRepository.findById(followers[x]).get();
-            userInfos.add(new UserInfo(follow));
+            if(follow.getCurrentPlanID()!=null)
+            {
+                Plan plan = planRepository.findById(follow.getCurrentPlanID()).get();
+                userInfos.add(new UserInfo(follow, plan));
+            }else{
+                userInfos.add(new UserInfo(follow));
+            }
         }
         return userInfos;
     }
@@ -80,7 +95,13 @@ public class UserController {
         int init = page * entries_each_page;
         for (int x = init; x < followings.length; x++) {
             User following = userRepository.findById(followings[x]).get();
-            userInfos.add(new UserInfo(following));
+            if(following.getCurrentPlanID()!=null)
+            {
+                Plan plan = planRepository.findById(following.getCurrentPlanID()).get();
+                userInfos.add(new UserInfo(following, plan));
+            }else{
+                userInfos.add(new UserInfo(following));
+            }
         }
         return userInfos;
     }

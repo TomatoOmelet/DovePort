@@ -44,7 +44,6 @@ public class PlanController {
                 plan.setOwnerID(user.getId());
                 plan.setState("active");
                 Plan planData = planRepository.save(plan);
-                //System.out.println(planData.getId());
                 user.setCurrentPlanID(planData.getId());
                 userRepository.save(user);
                 return new ResponseEntity<>(HttpStatus.ACCEPTED);
