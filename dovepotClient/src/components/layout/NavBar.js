@@ -11,7 +11,12 @@ const Navbar = () => {
     useEffect(() => {
         if(!isAuthenticated)
         {
-            loadUser();
+            let mounted = true
+            if(mounted)
+            {
+                loadUser();
+            }
+            return () => mounted = false;
         }
         
     }, [])
