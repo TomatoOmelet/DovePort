@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from "prop-types"
 import UserSearchResult from '../Search/UserInfo'
 
-export const UserList = ({users, emptyMessage}) => {
+export const UserList = ({users, emptyMessage, totalUsers}) => {
     return (
         <div>
             {users.length <= 0?<p>{emptyMessage}</p>:
@@ -15,5 +15,6 @@ export const UserList = ({users, emptyMessage}) => {
 
 UserList.propTypes = {
     users: PropTypes.array.isRequired,
+    totalUsers: PropTypes.number.isRequired,
     emptyMessage: PropTypes.string.isRequired
 }

@@ -4,12 +4,12 @@ import java.util.List;
 
 public class UserInfoPage {
     private List<UserInfo> content;
-    private int maxSize;
+    private int totalSize;
 
-    public UserInfoPage(List<UserInfo> content, int maxSize)
+    public UserInfoPage(List<UserInfo> content, int totalSize)
     {
         this.content = content;
-        this.maxSize = maxSize;
+        this.totalSize = totalSize;
     }
 
     public List<UserInfo> getContent() {
@@ -20,12 +20,12 @@ public class UserInfoPage {
         this.content = content;
     }
 
-    public int getMaxSize() {
-        return maxSize;
+    public int getTotalSize() {
+        return totalSize;
     }
 
-    public void setMaxSize(int maxSize) {
-        this.maxSize = maxSize;
+    public void setTotalSize(int totalSize) {
+        this.totalSize = totalSize;
     }
     
 }

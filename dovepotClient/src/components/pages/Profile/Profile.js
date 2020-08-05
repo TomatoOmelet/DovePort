@@ -52,8 +52,8 @@ const Profile = () => {
                 </div>
 
                 <div className="col">
-                {state.mode==="followers"&&<UserList users = {state.info} emptyMessage={profilePageStrings.emptyFollowers}/>}
-                {state.mode==="followings"&&<UserList users = {state.info} emptyMessage={profilePageStrings.emptyFollowings}/>}
+                {state.mode==="followers"&&<UserList users = {state.info.content} totalUsers={state.info.totalSize} emptyMessage={profilePageStrings.emptyFollowers}/>}
+                {state.mode==="followings"&&<UserList users = {state.info.content} totalUsers={state.info.totalSize} emptyMessage={profilePageStrings.emptyFollowings}/>}
                 </div>
             </div>
         )
