@@ -4,7 +4,9 @@ export let navbarStrings = new LocalizedStrings({
     English:{
         explore:"Explore",
         profile:"Profile",
-        search:"Search"
+        search:"Search",
+        login: "Login",
+        register: "Register"
     },
     Chinese: {
 
