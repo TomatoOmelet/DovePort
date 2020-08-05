@@ -46,18 +46,18 @@ public class UserController {
     JwtTokenUtil jwtUtil;
 
     @RequestMapping(method=RequestMethod.GET, value="/search")
-    public Iterable<UserInfo> SearchUsers(@Param("keyword") String keyword) {
+    public UserInfoPage SearchUsers(@Param("keyword") String keyword) {
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
         Pageable page = PageRequest.of(0, 20);
         Page<User> users = userRepository.findUsernameOrNameRegexQuery("^" + keyword, page);
         for (User user : users) {
             userInfos.add(userToUserInfo(user));
         }
-        return userInfos;
+        return new UserInfoPage(userInfos, (int)users.getTotalElements());
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/followers/{id}")
-    public Iterable<UserInfo> getFollowers(@Param("entries_each_page") Integer entries_each_page, @Param("page") Integer page
+    public UserInfoPage getFollowers(@Param("entries_each_page") Integer entries_each_page, @Param("page") Integer page
                                         , @RequestHeader("${jwt.http.request.header}") String token, @PathVariable String id) {
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
         page -= 1;
@@ -69,11 +69,11 @@ public class UserController {
             User follow = userRepository.findById(followers[x]).get();
             userInfos.add(userToUserInfo(follow));
         }
-        return userInfos;
+        return new UserInfoPage(userInfos, followers.length);
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/followings/{id}")
-    public Iterable<UserInfo> getFollowings(@Param("entries_each_page") Integer entries_each_page, @Param("page") Integer page
+    public UserInfoPage getFollowings(@Param("entries_each_page") Integer entries_each_page, @Param("page") Integer page
                                         , @RequestHeader("${jwt.http.request.header}") String token, @PathVariable String id) {
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
         page -= 1;
@@ -85,7 +85,7 @@ public class UserController {
             User following = userRepository.findById(followings[x]).get();
             userInfos.add(userToUserInfo(following));
         }
-        return userInfos;
+        return new UserInfoPage(userInfos, followings.length);
     }
 
     @RequestMapping(method=RequestMethod.POST, value="")

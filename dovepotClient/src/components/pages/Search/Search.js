@@ -29,7 +29,8 @@ const Search = () => {
             };
 
             const res = await axios.get(`${serverAddress}/api/users/search?keyword=${keyword}`, config);
-            setUsers(res.data.length > 0?res.data:null);
+            console.log(res)
+            setUsers(res.data.maxSize > 0?res.data.content:null);
         } catch (error) {
             console.log(error.message);
             setAlert(error.message);
