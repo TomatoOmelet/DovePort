@@ -23,7 +23,7 @@ const Profile = () => {
         }else if(users.mode==="followings"){
             showFollowings();
         }
-    }, [page, users.mode])
+    }, [page, users.mode, user])
 
     const pageUpButton= () =>{
         if(page - 1 >= 1)
@@ -41,7 +41,12 @@ const Profile = () => {
 
     const showFollowers=async()=>{
         try{
-            const followers = await getFollowers(user.id, page, users_per_page);
+            let followers;
+            if(page > totalPage){
+                setPage(totalPage);
+            }else{
+                followers = await getFollowers(user.id, page, users_per_page);
+            }
             setUsers({mode:"followers", info:followers});
         }catch(e){
             console.error(e.message)
@@ -51,7 +56,12 @@ const Profile = () => {
 
     const showFollowings=async()=>{
         try{
-            const followings = await getFollowings(user.id, page, users_per_page);
+            let followings;
+            if(page > totalPage){
+                setPage(totalPage);
+            }else{
+                followings = await getFollowings(user.id, page, users_per_page);
+            }
             setUsers({mode:"followings", info:followings});
         }catch(e){
             console.error(e.message)
