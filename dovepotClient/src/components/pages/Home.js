@@ -13,7 +13,7 @@ const Home = () => {
     const setFollowings = async() =>{
         try{
             const followings = await getFollowings(user.id);
-            setFriends(followings);
+            setFriends(followings.content);
         }catch(e){
             console.error(e.message)
         }
