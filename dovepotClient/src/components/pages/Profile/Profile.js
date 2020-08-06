@@ -4,18 +4,47 @@ import AuthContext from '../../../context/auth/authContext'
 import UserContext from '../../../context/user/userContext'
 import { UserList } from './UserList';
 import PlanPage from './PlanPage';
+import PagingBar from '../../layout/PagingBar';
 
 const Profile = () => {
     const authContext = useContext(AuthContext);
     const userContext = useContext(UserContext);
-    const [state, setState] = useState({mode:"none", info:[]});
+    const [users, setUsers] = useState({mode:"none", info:{}});
+    const [page, setPage] = useState(1);
     const {logout, user} = authContext;
     const {getFollowings, getFollowers} = userContext;
 
+    const users_per_page = 5
+    const totalPage = users.info.totalSize?Math.floor((users.info.totalSize-1)/users_per_page + 1):1;
+
+    const pageUpButton= () =>{
+        if(page + 1 <= totalPage)
+        {
+            setPage(page + 1);
+            if(users.mode==="followers"){
+                showFollowers();
+            }else{
+                showFollowings();
+            }
+        }
+    }
+
+    const pageDownButton= () =>{
+        if(page - 1 >= 1)
+        {
+            setPage(page - 1);
+            if(users.mode==="followers"){
+                showFollowers();
+            }else{
+                showFollowings();
+            }
+        }
+    }
+
     const showFollowers=async()=>{
         try{
-            const followers = await getFollowers(user.id);
-            setState({mode:"followers", info:followers});
+            const followers = await getFollowers(user.id, page, users_per_page);
+            setUsers({mode:"followers", info:followers});
         }catch(e){
             console.error(e.message)
         }
@@ -24,8 +53,8 @@ const Profile = () => {
 
     const showFollowings=async()=>{
         try{
-            const followings = await getFollowings(user.id);
-            setState({mode:"followings", info:followings});
+            const followings = await getFollowings(user.id, page, users_per_page);
+            setUsers({mode:"followings", info:followings});
         }catch(e){
             console.error(e.message)
     }
@@ -52,8 +81,9 @@ const Profile = () => {
                 </div>
 
                 <div className="col">
-                {state.mode==="followers"&&<UserList users = {state.info.content} totalUsers={state.info.totalSize} emptyMessage={profilePageStrings.emptyFollowers}/>}
-                {state.mode==="followings"&&<UserList users = {state.info.content} totalUsers={state.info.totalSize} emptyMessage={profilePageStrings.emptyFollowings}/>}
+                    <PagingBar page={page} totalPage={totalPage} pageUp={pageUpButton} pageDown = {pageDownButton}/>
+                {users.mode==="followers"&&<UserList users = {users.info.content} emptyMessage={profilePageStrings.emptyFollowers}/>}
+                {users.mode==="followings"&&<UserList users = {users.info.content} emptyMessage={profilePageStrings.emptyFollowings}/>}
                 </div>
             </div>
         )

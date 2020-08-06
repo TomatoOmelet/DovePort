@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from "prop-types"
 import UserSearchResult from '../Search/UserInfo'
+import PagingBar from '../../layout/PagingBar'
 
-export const UserList = ({users, emptyMessage, totalUsers}) => {
+export const UserList = ({users, emptyMessage}) => {
+    
     return (
         <div>
+            {/**content*/}
             {users.length <= 0?<p>{emptyMessage}</p>:
             users.map((user, index) => {
                 return <UserSearchResult key={index} user={user}/>
@@ -15,6 +18,5 @@ export const UserList = ({users, emptyMessage, totalUsers}) => {
 
 UserList.propTypes = {
     users: PropTypes.array.isRequired,
-    totalUsers: PropTypes.number.isRequired,
     emptyMessage: PropTypes.string.isRequired
 }
