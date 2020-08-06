@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react'
+import React,{useContext, useState, useEffect} from 'react'
 import {profilePageStrings} from "../../../resource/text/UItext"
 import AuthContext from '../../../context/auth/authContext'
 import UserContext from '../../../context/user/userContext'
@@ -17,27 +17,25 @@ const Profile = () => {
     const users_per_page = 5
     const totalPage = users.info.totalSize?Math.floor((users.info.totalSize-1)/users_per_page + 1):1;
 
+    useEffect(() => {
+        if(users.mode==="followers"){
+            showFollowers();
+        }else if(users.mode==="followings"){
+            showFollowings();
+        }
+    }, [page, users.mode])
+
     const pageUpButton= () =>{
-        if(page + 1 <= totalPage)
+        if(page - 1 >= 1)
         {
-            setPage(page + 1);
-            if(users.mode==="followers"){
-                showFollowers();
-            }else{
-                showFollowings();
-            }
+            setPage(page - 1);
         }
     }
 
     const pageDownButton= () =>{
-        if(page - 1 >= 1)
+        if(page + 1 <= totalPage)
         {
-            setPage(page - 1);
-            if(users.mode==="followers"){
-                showFollowers();
-            }else{
-                showFollowings();
-            }
+            setPage(page + 1);
         }
     }
 
@@ -69,10 +67,10 @@ const Profile = () => {
                 <div className="col">
                     <h3 style={{display:"inline"}}>{name}</h3><p>@{username}</p>
                     <button type="submit" className="btn btn-primary" style={{marginRight:"5px"}} 
-                            onClick={showFollowings}>{profilePageStrings.followings}:{followings.length}</button>
+                            onClick={()=>{setUsers({...users, mode:"followings"})}}>{profilePageStrings.followings}:{followings.length}</button>
                     
                     <button type="submit" className="btn btn-primary"  style={{marginInline:"5px"}} 
-                            onClick={showFollowers}>{profilePageStrings.followers}:{followers.length}</button>
+                            onClick={()=>{setUsers({...users, mode:"followers"})}}>{profilePageStrings.followers}:{followers.length}</button>
                     
                     <button type="submit" className="btn btn-danger"  style={{marginInline:"5px"}} 
                             onClick={logout}>{profilePageStrings.logOut}</button>
@@ -82,8 +80,8 @@ const Profile = () => {
 
                 <div className="col">
                     <PagingBar page={page} totalPage={totalPage} pageUp={pageUpButton} pageDown = {pageDownButton}/>
-                {users.mode==="followers"&&<UserList users = {users.info.content} emptyMessage={profilePageStrings.emptyFollowers}/>}
-                {users.mode==="followings"&&<UserList users = {users.info.content} emptyMessage={profilePageStrings.emptyFollowings}/>}
+                {users.mode==="followers"&&users.info.content&&<UserList users = {users.info.content} emptyMessage={profilePageStrings.emptyFollowers}/>}
+                {users.mode==="followings"&&users.info.content&&<UserList users = {users.info.content} emptyMessage={profilePageStrings.emptyFollowings}/>}
                 </div>
             </div>
         )
