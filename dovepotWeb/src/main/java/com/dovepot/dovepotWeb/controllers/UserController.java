@@ -65,7 +65,7 @@ public class UserController {
         User user = userRepository.findById(id).get();
         String[] followers = user.getFollowers().toArray(new String[0]);
         int init = page * entries_each_page;
-        for (int x = init; x < followers.length; x++) {
+        for (int x = init; x < followers.length && x < init + entries_each_page; x++) {
             User follow = userRepository.findById(followers[x]).get();
             userInfos.add(userToUserInfo(follow));
         }
@@ -81,7 +81,7 @@ public class UserController {
         User user = userRepository.findById(id).get();
         String[] followings = user.getFollowings().toArray(new String[0]);
         int init = page * entries_each_page;
-        for (int x = init; x < followings.length; x++) {
+        for (int x = init; x < followings.length && x < init + entries_each_page; x++) {
             User following = userRepository.findById(followings[x]).get();
             userInfos.add(userToUserInfo(following));
         }
