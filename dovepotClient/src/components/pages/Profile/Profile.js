@@ -25,20 +25,6 @@ const Profile = () => {
         }
     }, [page, users.mode, user])
 
-    const pageUpButton= () =>{
-        if(page - 1 >= 1)
-        {
-            setPage(page - 1);
-        }
-    }
-
-    const pageDownButton= () =>{
-        if(page + 1 <= totalPage)
-        {
-            setPage(page + 1);
-        }
-    }
-
     const showFollowers=async()=>{
         try{
             let followers;
@@ -89,7 +75,7 @@ const Profile = () => {
                 </div>
 
                 <div className="col">
-                    <PagingBar page={page} totalPage={totalPage} pageUp={pageUpButton} pageDown = {pageDownButton}/>
+                {users.mode!=="none"&&<PagingBar page={page} totalPage={totalPage} onChange={(p)=>(setPage(p))}/>}
                 {users.mode==="followers"&&users.info.content&&<UserList users = {users.info.content} emptyMessage={profilePageStrings.emptyFollowers}/>}
                 {users.mode==="followings"&&users.info.content&&<UserList users = {users.info.content} emptyMessage={profilePageStrings.emptyFollowings}/>}
                 </div>

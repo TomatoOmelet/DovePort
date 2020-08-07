@@ -31,20 +31,6 @@ const Search = () => {
         setSearchKeyword(keyword);
     }
 
-    const pageUpButton= () =>{
-        if(page - 1 >= 1)
-        {
-            setPage(page - 1);
-        }
-    }
-
-    const pageDownButton= () =>{
-        if(page + 1 <= totalPage)
-        {
-            setPage(page + 1);
-        }
-    }
-
     const search = async ()=>{
         try {
             if(searchkeyword.length <= 0)
@@ -77,7 +63,7 @@ const Search = () => {
                 return <UserSearchResult key={index} user={user}/>
             })}
             {users===null&&<p>{searchPageStrings.noResultFound}</p>}
-            {users&&users.content&&users.content.length>0&&<PagingBar page={page} totalPage={totalPage} pageUp={pageUpButton} pageDown={pageDownButton}/>}
+            {users&&users.content&&users.content.length>0&&<PagingBar totalPage={totalPage} onChange={(p)=>{setPage(p)}}/>}
         </div>
     )
 }
