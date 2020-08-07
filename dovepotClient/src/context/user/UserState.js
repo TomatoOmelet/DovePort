@@ -9,7 +9,7 @@ import UserContext from "./userContext"
 const UserState = (props)=>{
 
     const alertContext = useContext(AlertContext);
-    const {setAlert, setAlertWithError} = alertContext;
+    const {setAlertWithError} = alertContext;
     const authContext = useContext(AuthContext);
     const {loadUser} = authContext;
 
@@ -17,7 +17,7 @@ const UserState = (props)=>{
 
     }
 
-    const [state, dispatch] = useReducer(UserReducer, initialState);
+    //const [state, dispatch] = useReducer(UserReducer, initialState);
 
     //follow User
     const followUser = async (id)=>{

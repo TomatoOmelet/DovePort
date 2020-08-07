@@ -46,10 +46,12 @@ public class UserController {
     JwtTokenUtil jwtUtil;
 
     @RequestMapping(method=RequestMethod.GET, value="/search")
-    public UserInfoPage SearchUsers(@Param("keyword") String keyword) {
+    public UserInfoPage SearchUsers(@Param("keyword") String keyword, @Param("entries_each_page") Integer entries_each_page, @Param("page") Integer page) {
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
-        Pageable page = PageRequest.of(0, 20);
-        Page<User> users = userRepository.findUsernameOrNameRegexQuery("^" + keyword, page);
+        page -= 1;
+        page = page>0?page:0;
+        Pageable pageContent = PageRequest.of(page, entries_each_page);
+        Page<User> users = userRepository.findUsernameOrNameRegexQuery("^" + keyword, pageContent);
         for (User user : users) {
             userInfos.add(userToUserInfo(user));
         }
