@@ -16,7 +16,7 @@ const Search = () => {
     const [users, setUsers] = useState([])
     const [page, setPage] = useState(1)
     const entries_each_page = 10;
-    const totalPage = (users&&users.totalSize)?Math.floor((users.totalSize-1)/entries_each_page + 1):1;;
+    const totalPage = (users&&users.totalSize)?Math.floor((users.totalSize-1)/entries_each_page + 1):1;
 
     useEffect(() => {
         search();
